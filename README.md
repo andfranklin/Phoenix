@@ -1,6 +1,6 @@
 Phoenix
 =====
 
-"Fork Phoenix" to create a new MOOSE-based application.
+![logo](https://upload.wikimedia.org/wikipedia/commons/4/43/Phoenix-Fabelwesen.jpg "Phoenix")
 
-For more information see: [http://mooseframework.org/create-an-app/](http://mooseframework.org/create-an-app/)
+A MOOSE app for radiation heat transfer. Calculates view factors.
