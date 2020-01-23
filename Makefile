@@ -47,6 +47,10 @@ XFEM                        := no
 include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
+include libCGAL.mk
+
+###############################################################################
+
 # dep apps
 APPLICATION_DIR    := $(CURDIR)
 APPLICATION_NAME   := phoenix

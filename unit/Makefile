@@ -52,6 +52,13 @@ ADDITIONAL_LIBS     := $(FRAMEWORK_DIR)/contrib/gtest/libgtest.la
 CURRENT_DIR        := $(shell pwd)
 APPLICATION_DIR    := $(CURRENT_DIR)/..
 APPLICATION_NAME   := phoenix
+
+###############################################################################
+
+include $(APPLICATION_DIR)/libCGAL.mk
+
+###############################################################################
+
 include            $(FRAMEWORK_DIR)/app.mk
 
 APPLICATION_DIR    := $(CURRENT_DIR)
