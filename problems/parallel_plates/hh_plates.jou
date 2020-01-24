@@ -1,0 +1,62 @@
+title "Hexahedral - Hexahedral Plates"
+
+# problem parameters
+
+#{left_width=10}
+#{left_height=10}
+#{left_thickness=1.0}
+
+#{right_width=10}
+#{right_height=10}
+#{right_thickness=1.0}
+
+#{separation=10}
+
+#{surface_mesh_size=1.0}
+#{mesh_size=1.0}
+
+graphics text size 2
+
+# build geometries
+create brick width {left_width} depth {left_thickness} height {left_height}
+create brick width {right_width} depth {right_thickness} height {right_height}
+volume 2 move x 0 y {separation} z 0
+
+# set universal meshing parameters
+volume 1 2 size {mesh_size}
+set tridelaunay point placement gq
+
+# meshing volume 1
+surface 5 size {surface_mesh_size}
+surface 5 scheme map
+mesh surface 5
+volume 1 scheme auto
+mesh volume 1
+
+# add sidesets to volume 1
+sideset 1 surface 1 # top
+sideset 2 surface 2 # bottom
+sideset 3 surface 4 # left
+sideset 4 surface 6 # right
+sideset 5 surface 5 # front
+sideset 6 surface 3 # back
+
+# meshing volume 2
+surface 11 size {surface_mesh_size}
+surface 11 scheme map
+mesh surface 11
+volume 2 scheme auto
+mesh volume 2
+
+# add sidesets to volume 2
+sideset 7 surface 7 # top
+sideset 8 surface 8 # bottom
+sideset 9 surface 10 # left
+sideset 10 surface 12 # right
+sideset 11 surface 11 # front
+sideset 12 surface 9 # back
+
+export mesh "hh_plates.e" overwrite
+
+quality volume 1
+quality volume 2

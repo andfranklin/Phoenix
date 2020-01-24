@@ -1,0 +1,40 @@
+title "Hollow Cup"
+
+# problem parameters
+#{n_azimuthal_intervals=26} # must always be even
+#{pair_node=40} # (3 * (n_azimuthal_intervals // 2)) + 1
+
+graphics text size 2
+
+# build geometry
+create cylinder height 10 radius 2.5
+create cylinder height 12 radius 2
+subtract 2 from 1
+
+# add block info
+#block 1 volume 1
+#block 1 element HEX8
+
+# meshing
+curve 2 5 scheme equal
+curve 2 5 interval {n_azimuthal_intervals} # n_intervals must be even
+mesh curve 2 5
+surface 9 scheme hole rad_intervals 1 pair node 1 with node {pair_node}
+surface 9 size 0.5
+mesh surface 9
+
+#surface 9 scheme hole rad_intervals 1
+#surface 9 size 0.5
+#mesh surface 9
+
+volume 1 size 1
+volume 1 scheme auto
+mesh volume 1
+
+# add sidesets
+sideset 1 surface 9
+sideset 2 surface 1
+sideset 3 surface 8
+sideset 4 surface 7
+
+export mesh "hollow_cylinder.e" overwrite
