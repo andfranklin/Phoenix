@@ -41,10 +41,7 @@ protected:
 
 protected:
   using surface_ptr_t = std::shared_ptr<SurfaceBase<BaseKernel>>;
-
-  SymmetricDualMap<surface_ptr_t, bool> _elements_connected; // ?
   SymmetricDualMap<surface_ptr_t, libMesh::Real> _view_factor_residuals;
-
   SurfaceWarehouse<BaseKernel> _surface_warehouse;
 
   std::shared_ptr<SurfaceBase<BaseKernel>> _from_surf;
