@@ -1,13 +1,14 @@
 Phoenix
 =======
 
+A [MOOSE](https://www.mooseframework.org/) app for radiation heat transfer.
+
 ![logo](https://upload.wikimedia.org/wikipedia/commons/4/43/Phoenix-Fabelwesen.jpg "Phoenix")
 
-A [MOOSE](https://www.mooseframework.org/) app for radiation heat transfer. It can deterministically
-calculate view factors between/of arbitrary geometries. Occlusion and self-occlusion can be accounted
-for. A variety of options exist for the users to select between using (fast, but potentially buggy) floating
-point numbers as the basis for the view factor computation or "exact" numbers (slow, but avoids bugs common
-with floating points).
+Phoenix can deterministically calculate view factors between/of arbitrary geometries. Occlusion and
+self-occlusion can be accounted for. A variety of options exist for the users to select between
+using (fast, but potentially buggy) floating point numbers as the basis for the view factor
+computation or "exact" numbers (slow, but avoids bugs common with floating points).
 
 _Disclaimer_: Of course, "exact" numbers are not exact. See
 [CGAL's](https://doc.cgal.org/latest/Manual/tutorial_hello_world.html) documentation for more information.
@@ -63,7 +64,7 @@ Finally, Phoenix can be built:
 
     make -j <number of cores>
 
-To avoid getting burned by Phoenix, verify that everything has been installed properly by running the tests:
+To avoid getting burned :wink: by Phoenix, verify that everything has been installed properly by running the tests:
 
 	./run_tests
 
