@@ -10,8 +10,8 @@ self-occlusion can be accounted for. A variety of options exist for the users to
 using (fast, but potentially buggy) floating point numbers as the basis for the view factor
 computation or "exact" numbers (slow, but avoids bugs common with floating points).
 
-_Disclaimer_: Of course, "exact" numbers are not exact. See
-[CGAL's](https://doc.cgal.org/latest/Manual/tutorial_hello_world.html) documentation for more information.
+_Note_: See [CGAL's](https://doc.cgal.org/latest/Manual/tutorial_hello_world.html) documentation
+for more information about "exact" computation.
 
 Setup
 =====
