@@ -28,9 +28,16 @@ quadrature_order = 'FOURTH'
     new_block_id = '2'
   []
 
-  [cmbn]
+  [combined_raw]
     type = CombinerGenerator
     inputs = 'left_plate right_plate'
+  []
+
+  [combined]
+    type = RenameBlockGenerator
+    input = 'combined_raw'
+    old_block_id = '1 2'
+    new_block_name = 'left_plate right_plate'
   []
 []
 
