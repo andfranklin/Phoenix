@@ -21,7 +21,7 @@ gmsh.option.setNumber("Mesh.Algorithm", 6)
 gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.4)
 gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 0.4)
 
-factory.addBox(R, 0.0, 0.0, R, R, R, 1)
+factory.addBox(10.0, 0.0, 0.0, 1.0, 10.0, 10.0, 1)
 
 factory.synchronize()
 model.mesh.generate(3)
