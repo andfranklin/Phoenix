@@ -29,20 +29,6 @@ quadrature_order = 'FOURTH'
     replace = true
     variance = 1e-6
   []
-  #
-  # [left_plate_bounded]
-  #   type = AllSideSetsByNormalsGenerator
-  #   input = 'left_plate_blocked'
-  #   replace = true
-  #   variance = 1e-6
-  # []
-  #
-  # [left_plate]
-  #   type = RenameBoundaryGenerator
-  #   input = 'left_plate_bounded'
-  #   old_boundary_id = '0 1 2 3 4 5 6'
-  #   new_boundary_name = 'lp lp_front lp_left lp_top lp_bottom lp_back lp_right'
-  # []
 
   [raw_right_plate]
     type = FileMeshGenerator
@@ -55,20 +41,6 @@ quadrature_order = 'FOURTH'
     old_block_id = '0'
     new_block_id = '2'
   []
-
-  # [right_plate_bounded]
-  #   type = AllSideSetsByNormalsGenerator
-  #   input = 'right_plate_blocked'
-  #   replace = true
-  #   variance = 1e-6
-  # []
-
-  # [right_plate]
-  #   type = RenameBoundaryGenerator
-  #   input = 'right_plate_bounded'
-  #   old_boundary_id = '0 1 2 3 4 5 6'
-  #   new_boundary_name = 'rp rp_top rp_right rp_front rp_back rp_bottom rp_left'
-  # []
 
   [right_plate]
     type = SideSetsFromNormalsGenerator
@@ -119,35 +91,35 @@ quadrature_order = 'FOURTH'
   [../]
 []
 
-#[BCs]
-#  [./lp_bottom]
-#    type = DirichletBC
-#    variable = diffused
-#    boundary = 'lp_bottom'
-#    value = 1
-#  [../]
+[BCs]
+ [./lp_bottom]
+   type = DirichletBC
+   variable = diffused
+   boundary = 'lp_bottom'
+   value = 1
+ [../]
 
-#  [./lp_top]
-#    type = DirichletBC
-#    variable = diffused
-#    boundary = 'lp_top'
-#    value = 0
-#  [../]
+ [./lp_top]
+   type = DirichletBC
+   variable = diffused
+   boundary = 'lp_top'
+   value = 0
+ [../]
 
-#  [./rp_bottom]
-#    type = DirichletBC
-#    variable = diffused
-#    boundary = 'rp_bottom'
-#    value = 0
-#  [../]
+ [./rp_bottom]
+   type = DirichletBC
+   variable = diffused
+   boundary = 'rp_bottom'
+   value = 0
+ [../]
 
-#  [./rp_top]
-#    type = DirichletBC
-#    variable = diffused
-#    boundary = 'rp_top'
-#    value = 1
-#  [../]
-#[]
+ [./rp_top]
+   type = DirichletBC
+   variable = diffused
+   boundary = 'rp_top'
+   value = 1
+ [../]
+[]
 
 [UserObjects]
   [./view_factor_calculator]
@@ -156,9 +128,6 @@ quadrature_order = 'FOURTH'
     quadrature_type = ${quadrature_type}
 
     execute_on = 'INITIAL'
-    # boundary = '0 1 2 3 4 5 6'
-    # boundary = '1 2 3 4 5 6'
-    # boundary = 'lp_front rp_back'
     boundary = 'lp_right rp_left'
 
     occlusion_detection = NONE
