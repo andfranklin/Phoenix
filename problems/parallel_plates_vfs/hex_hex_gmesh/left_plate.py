@@ -1,4 +1,3 @@
-import meshio
 import gmsh
 import sys
 
@@ -9,7 +8,6 @@ factory = model.occ
 
 FILENAME_STEM = __file__.split(".")[0]
 MSH_FILENAME = f"{FILENAME_STEM}.msh"
-EXD_FILENAME = f"{FILENAME_STEM}.e"
 
 gmsh.initialize(sys.argv)
 
@@ -18,8 +16,8 @@ gmsh.option.setNumber("General.Terminal", 1)
 model.add(FILENAME_STEM)
 
 gmsh.option.setNumber("Mesh.Algorithm", 6)
-gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.4)
-gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 0.4)
+gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 1.0)
+gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 1.0)
 
 factory.addBox(0.0, 0.0, 0.0, 1.0, 10.0, 10.0, 1)
 
@@ -28,6 +26,3 @@ model.mesh.generate(3)
 
 gmsh.write(MSH_FILENAME)
 gmsh.finalize()
-
-mesh = meshio.read(MSH_FILENAME)
-meshio.write(EXD_FILENAME, mesh)

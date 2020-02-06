@@ -1,4 +1,4 @@
-case = 'mesh_generated_plates'
+case = 'hex_hex'
 refinement_level = 0
 quadrature_type = 'GAUSS'
 quadrature_order = 'FOURTH'
