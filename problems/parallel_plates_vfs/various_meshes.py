@@ -1,11 +1,9 @@
-from utils import make_subdir
+from utils import make_subdir, cases
 from analytic_functions import c_12_analytic_function as analytic_function
 from extract_view_factors import call_phoenix
 
 quadrature_order = "FOURTH"
 quadrature_type = "GAUSS"
-# cases = ["hh_plates", "ht_plates", "htp_plates", "tpt_plates", "tptp_plates", "tt_plates"]
-cases = ["pyr_pyr"]
 refinement_level = 0
 analytic_solution = analytic_function(10.0, 10.0, 9.0)
 
