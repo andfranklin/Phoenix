@@ -5,7 +5,7 @@ A [MOOSE](https://www.mooseframework.org/) app for radiation heat transfer.
 
 ![logo](https://upload.wikimedia.org/wikipedia/commons/4/43/Phoenix-Fabelwesen.jpg "Phoenix")
 
-Phoenix can deterministically calculate view factors between/of arbitrary geometries. Occlusion and
+Phoenix deterministically calculates view factors between/of arbitrary geometries. Occlusion and
 self-occlusion can be accounted for. A variety of options exist for the users to select between
 using (fast, but potentially buggy) floating point numbers as the basis for the view factor
 computation or "exact" numbers (slow, but avoids bugs common with floating points).
