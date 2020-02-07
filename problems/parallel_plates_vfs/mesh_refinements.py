@@ -21,13 +21,13 @@ analytic_solution = analytic_function(10.0, 10.0, 9.0)
 # quadrature_types = ["CLOUGH", "CONICAL", "GAUSS", "GRID", "MONOMIAL",
 #                     "SIMPSON", "TRAP", "GAUSS_LOBATTO"]
 
-quadrature_types = ["GAUSS", "GRID", "MONOMIAL",
-                    "SIMPSON", "TRAP"]
+# quadrature_types = ["GAUSS", "GRID", "MONOMIAL",
+#                     "SIMPSON", "TRAP"]
 
-# quadrature_types = ["GAUSS", "GRID", "SIMPSON", "TRAP"]
+quadrature_types = ["GAUSS", "GRID", "SIMPSON", "TRAP"]
 quadrature_order = "FIRST"
 
-refinement_levels = list(range(6))
+refinement_levels = list(range(3))
 for quadrature_type in quadrature_types:
     errors = []
     for refinement_level in refinement_levels:

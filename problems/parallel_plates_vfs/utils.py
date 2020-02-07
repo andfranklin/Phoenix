@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from subprocess import check_output
 from os import getcwd, chdir
 
-cases = {"hex_hex", "pyr_pyr"}
+cases = {"hex_hex", "pyr_pyr", "pri_pri"}
 
 def make_command_line_parser(description):
 	parser = ArgumentParser(description=description)
