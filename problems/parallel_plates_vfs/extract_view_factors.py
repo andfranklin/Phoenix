@@ -1,9 +1,6 @@
 import subprocess
 
 
-analytic_solution = 0.2285656684427083418231774203377426601946
-
-
 def is_viewfactor_line(line):
     line_str = str(line)
     return " -> " in line_str or "  view factor : " in line_str
@@ -35,9 +32,8 @@ class VFMatrix:
         return self.matrix[key]
 
 
-def call_phoenix(case="coarse_plates", refinement_level=0, quadrature_type="GAUSS", quadrature_order="FOURTH"):
-    call_list = ["../../phoenix-opt", "-i", "view_factors.i"]
-    call_list.append(f"case={case}")
+def call_phoenix(case, refinement_level=0, quadrature_type="GAUSS", quadrature_order="FOURTH"):
+    call_list = ["../../phoenix-opt", "-i", f"{case}/view_factors.i"]
     call_list.append(f"refinement_level={refinement_level}")
     call_list.append(f"quadrature_type={quadrature_type}")
     call_list.append(f"quadrature_order={quadrature_order}")

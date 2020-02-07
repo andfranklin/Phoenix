@@ -1,4 +1,4 @@
-case = 'hex_hex'
+case = 'pyr_pyr'
 refinement_level = 0
 quadrature_type = 'GAUSS'
 quadrature_order = 'FOURTH'
@@ -75,6 +75,8 @@ quadrature_order = 'FOURTH'
     new_boundary_name = 'lp_right lp_left lp_front lp_back lp_top lp_bottom
                          rp_right rp_left rp_front rp_back rp_top rp_bottom'
   []
+
+  uniform_refine = ${refinement_level}
 []
 
 [Variables]
