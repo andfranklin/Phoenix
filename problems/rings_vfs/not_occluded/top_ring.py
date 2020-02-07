@@ -13,9 +13,11 @@ gmsh.option.setNumber("General.Terminal", 1)
 
 model.add(FILENAME_STEM)
 
+mesh_size = 1.0 * 0.25
+
 gmsh.option.setNumber("Mesh.Algorithm", 6);
-gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 1.0);
-gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 1.0);
+gmsh.option.setNumber("Mesh.CharacteristicLengthMin", mesh_size);
+gmsh.option.setNumber("Mesh.CharacteristicLengthMax", mesh_size);
 
 height = 1.0
 outer_rad = 6.0
