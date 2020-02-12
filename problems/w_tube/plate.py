@@ -1,6 +1,7 @@
 import gmsh
 import sys
-from dimensions import l1, a, b, s, thickness
+from parameters import l1, a, b, s, thickness
+from parameters import n_x, n_y, n_z
 
 model = gmsh.model
 factory = model.occ
@@ -21,9 +22,9 @@ bl_x = x_center - (0.5 * a)
 bl_y = y_center - (0.5 * b)
 
 point = model.geo.addPoint(bl_x, bl_y, -s)
-line = model.geo.extrude([(0, point)], a, 0.0, 0.0, [15], recombine=True)
-surf = model.geo.extrude([line[1]], 0.0, b, 0.0, numElements=[10], recombine=True)
-model.geo.extrude(surf, 0.0, 0.0, -4.0 * thickness, numElements=[1], recombine=True)
+line = model.geo.extrude([(0, point)], a, 0.0, 0.0, [n_x], recombine=True)
+surf = model.geo.extrude([line[1]], 0.0, b, 0.0, numElements=[n_y], recombine=True)
+model.geo.extrude(surf, 0.0, 0.0, -4.0 * thickness, numElements=[n_z], recombine=True)
 
 model.geo.synchronize()
 model.mesh.generate(3)

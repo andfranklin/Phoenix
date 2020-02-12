@@ -1,7 +1,8 @@
 import sys
 import gmsh
 from meshing_functions import make_elbow, make_tube
-from dimensions import R, r, l1, l2, thickness
+from parameters import R, r, l1, l2, thickness
+from parameters import n_rings, n_sectors, n_axial, n_layers_2_3, n_layers_6_7
 
 model = gmsh.model
 
@@ -11,12 +12,6 @@ MSH_FILENAME = f"{FILENAME_STEM}.msh"
 gmsh.initialize(sys.argv)
 gmsh.option.setNumber("General.Terminal", 1)
 model.add(FILENAME_STEM)
-
-n_rings = 1
-n_sectors = 2
-n_axial = 14
-n_layers_2_3 = 9
-n_layers_6_7 = 9
 
 inner_radius = r - thickness
 outer_radius = r
