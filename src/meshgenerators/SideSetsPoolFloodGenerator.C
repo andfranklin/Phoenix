@@ -20,8 +20,11 @@ SideSetsPoolFloodGenerator::validParams()
   params.addClassDescription("Adds new sidesets starting at the specified point containing all "
                              "connected element faces that are a part of the specified pool "
                              "sideset. Analogous to the paint bucket in Microsoft Paint.");
-  params.addRequiredParam<BoundaryName>("new_boundary", "The name of the boundary to create");
-  params.addRequiredParam<Point>("point", "The point from which to start filling-in the new sidesets");
+
+  params.addParam<BoundaryName>("pool_boundary", "0", "The name of the boundary which can be flooded");
+
+  params.addRequiredParam<std::vector<BoundaryName>>("new_boundaries", "The name of the boundaries to create");
+  params.addRequiredParam<std::vector<Point>>("points", "A list of points from which to start painting sidesets");
 
   return params;
 }
@@ -29,11 +32,15 @@ SideSetsPoolFloodGenerator::validParams()
 SideSetsPoolFloodGenerator::SideSetsPoolFloodGenerator(const InputParameters & parameters)
   : SideSetsGeneratorBase(parameters),
     _input(getMesh("input")),
-    _boundary_name(getParam<BoundaryName>("new_boundary")),
-    _point(getParam<Point>("point"))
+    _pool_boundary_name(getParam<BoundaryName>("pool_boundary")),
+    _boundary_names(getParam<std::vector<BoundaryName>>("new_boundaries")),
+    _points(getParam<std::vector<Point>>("points"))
 {
   if (typeid(_input).name() == typeid(std::unique_ptr<DistributedMesh>).name())
     mooseError("SideSetsPoolFloodGenerator only works with ReplicatedMesh.");
+
+  if (_points.size() != _boundary_names.size())
+    mooseError("point list and boundary list are not the same length");
 }
 
 std::unique_ptr<MeshBase>
@@ -41,19 +48,23 @@ SideSetsPoolFloodGenerator::generate()
 {
   std::unique_ptr<MeshBase> mesh = std::move(_input);
 
-  BoundaryID pool_id = 0;
-  BoundaryID new_id = MooseMeshUtils::getBoundaryIDs(*mesh, {_boundary_name}, true)[0];
+  BoundaryID pool_id = MooseMeshUtils::getBoundaryIDs(*mesh, {_pool_boundary_name}, true)[0];
+  std::vector<BoundaryID> new_ids = MooseMeshUtils::getBoundaryIDs(*mesh, _boundary_names, true);
 
   setup(*mesh);
 
-  _visited.clear();
-  fill_pool(_point, pool_id, new_id, *mesh);
+  unsigned int i = 0;
+  for (const auto & point : _points)
+  {
+    _visited.clear();
+    fill_pool(point, pool_id, new_ids[i], *mesh);
+    ++i;
+  }
 
   finalize();
-  mesh->get_boundary_info().sideset_name(new_id) = _boundary_name;
 
-  // print sideset info
-  std::cout << *mesh << std::endl;
+  for (i = 0; i < new_ids.size(); ++i)
+    mesh->get_boundary_info().sideset_name(new_ids[i]) = _boundary_names[i];
 
   return dynamic_pointer_cast<MeshBase>(mesh);
 }

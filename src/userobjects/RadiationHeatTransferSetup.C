@@ -159,11 +159,13 @@ RadiationHeatTransferSetup::finalize()
     const auto & from_bnd_name = _mesh.getBoundaryName(from_bnd_id);
     const auto & from_bnd_inxs = _boundary_index_sets[from_bnd_id];
 
+    std::cout << from_bnd_name << " (" << from_bnd_id << ") : " << from_bnd_inxs.size() << std::endl;
+
     for (auto to_bnd_id : _boundary_ids)
     {
       const auto & to_bnd_name = _mesh.getBoundaryName(to_bnd_id);
       const auto & to_bnd_inxs = _boundary_index_sets[to_bnd_id];
-      std::cout << from_bnd_name << " -> " << to_bnd_name << std::endl;
+      std::cout << "  " << from_bnd_name << " -> " << to_bnd_name << std::endl;
 
       Real total_area = 0.0;
       Real view_factor = 0.0;
@@ -179,7 +181,7 @@ RadiationHeatTransferSetup::finalize()
       }
 
       view_factor = view_factor / total_area;
-      std::cout << "  view factor : " << std::setprecision(_precision) << view_factor << std::endl << std::endl;
+      std::cout << "    view factor : " << std::setprecision(_precision) << view_factor << std::endl << std::endl;
       // std::cout << "  total SA    : " << total_area << std::endl << std::endl;
     }
   }

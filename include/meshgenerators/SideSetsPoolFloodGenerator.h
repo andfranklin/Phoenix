@@ -44,7 +44,9 @@ protected:
 
   std::unique_ptr<MeshBase> & _input;
 
-  BoundaryName _boundary_name;
+  BoundaryName _pool_boundary_name;
 
-  Point _point;
+  std::vector<BoundaryName> _boundary_names;
+
+  std::vector<Point> _points;
 };
