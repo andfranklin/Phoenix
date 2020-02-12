@@ -93,8 +93,6 @@ def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_
     circ3 = model.geo.revolve([circ2[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
     circ4 = model.geo.revolve([circ3[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
 
-    # tube_axis = scale(height, axis_dir)
-
     tube1 = model.geo.revolve(circ1, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
     tube2 = model.geo.revolve(circ2, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
     tube3 = model.geo.revolve(circ3, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
