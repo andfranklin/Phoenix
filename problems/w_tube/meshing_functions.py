@@ -69,7 +69,7 @@ def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_
     assert inner_radius > 0.0
     assert n_rings > 0
     assert n_sectors > 0
-    assert n_axial > 0
+    assert n_axial > 1
     assert magnitude(axis_dir) > 0.0
     assert magnitude(rot_normal) > 0.0
     torus_radius = magnitude(add(center_of_rot, scale(-1.0, origin)))
