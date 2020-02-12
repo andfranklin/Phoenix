@@ -10,12 +10,12 @@ s = 450.0  # mm
 
 # w-tube meshing parameters
 n_rings = 1
-n_sectors = 2
-n_axial = 14
-n_layers_2_3 = 9
-n_layers_6_7 = 9
+n_sectors = 8     # 2
+n_axial = 24      # 14
+n_layers_2_3 = 36 # 9
+n_layers_6_7 = 48 # 9
 
 # plate meshing parameters
-n_x = 15
-n_y = 10
-n_z = 1
+n_x = 40 # 15
+n_y = 40 # 10
+n_z = 4
