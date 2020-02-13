@@ -30,8 +30,8 @@ def scale(scaler, vect):
 def add(a, b):
     return tuple(np.array(a) + np.array(b))
 
-_half_cir = np.pi
-_quarter_cir = 0.5 * _half_cir
+half_cir = np.pi
+quarter_cir = 0.5 * half_cir
 
 def make_tube(origin, axis_dir, inner_radius, outer_radius, height, n_rings, n_sectors, n_layers):
     assert outer_radius > inner_radius
@@ -53,10 +53,10 @@ def make_tube(origin, axis_dir, inner_radius, outer_radius, height, n_rings, n_s
     radial_axis = scale(thickness, radial_dir)
     line = model.geo.extrude([(0, point)], *radial_axis, [n_rings], recombine=True)
 
-    circ1 = model.geo.revolve([line[1]],  *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
-    circ2 = model.geo.revolve([circ1[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
-    circ3 = model.geo.revolve([circ2[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
-    circ4 = model.geo.revolve([circ3[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
+    circ1 = model.geo.revolve([line[1]],  *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
+    circ2 = model.geo.revolve([circ1[0]], *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
+    circ3 = model.geo.revolve([circ2[0]], *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
+    circ4 = model.geo.revolve([circ3[0]], *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
 
     tube_axis = scale(height, axis_dir)
     tube1 = model.geo.extrude(circ1, *tube_axis, [n_layers], recombine=True)
@@ -64,7 +64,7 @@ def make_tube(origin, axis_dir, inner_radius, outer_radius, height, n_rings, n_s
     tube3 = model.geo.extrude(circ3, *tube_axis, [n_layers], recombine=True)
     tube4 = model.geo.extrude(circ4, *tube_axis, [n_layers], recombine=True)
 
-def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_normal, n_rings, n_sectors, n_axial):
+def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_normal, n_rings, n_sectors, n_axial, torus_angle=half_cir):
     assert outer_radius > inner_radius
     assert inner_radius > 0.0
     assert n_rings > 0
@@ -74,6 +74,8 @@ def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_
     assert magnitude(rot_normal) > 0.0
     torus_radius = magnitude(add(center_of_rot, scale(-1.0, origin)))
     assert torus_radius > outer_radius
+    assert torus_angle > 0.0
+    assert torus_angle < 2.0 * np.pi
 
     axis_dir = normalize(axis_dir)
     rot_normal = normalize(rot_normal)
@@ -88,12 +90,12 @@ def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_
     radial_axis = scale(thickness, radial_dir)
     line = model.geo.extrude([(0, point)], *radial_axis, [n_rings], recombine=True)
 
-    circ1 = model.geo.revolve([line[1]],  *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
-    circ2 = model.geo.revolve([circ1[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
-    circ3 = model.geo.revolve([circ2[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
-    circ4 = model.geo.revolve([circ3[0]], *origin, *axis_dir, _quarter_cir, [n_sectors], recombine=True)
+    circ1 = model.geo.revolve([line[1]],  *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
+    circ2 = model.geo.revolve([circ1[0]], *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
+    circ3 = model.geo.revolve([circ2[0]], *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
+    circ4 = model.geo.revolve([circ3[0]], *origin, *axis_dir, quarter_cir, [n_sectors], recombine=True)
 
-    tube1 = model.geo.revolve(circ1, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
-    tube2 = model.geo.revolve(circ2, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
-    tube3 = model.geo.revolve(circ3, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
-    tube4 = model.geo.revolve(circ4, *center_of_rot, *rot_normal, _half_cir, [n_axial], recombine=True)
+    tube1 = model.geo.revolve(circ1, *center_of_rot, *rot_normal, torus_angle, [n_axial], recombine=True)
+    tube2 = model.geo.revolve(circ2, *center_of_rot, *rot_normal, torus_angle, [n_axial], recombine=True)
+    tube3 = model.geo.revolve(circ3, *center_of_rot, *rot_normal, torus_angle, [n_axial], recombine=True)
+    tube4 = model.geo.revolve(circ4, *center_of_rot, *rot_normal, torus_angle, [n_axial], recombine=True)
