@@ -20,8 +20,8 @@ quadrature_order = 'FOURTH'
     type = SideSetsFromPointsGenerator
     input = 'blocking_elbow'
     new_boundary = '1 2'
-    points = ' 9.0 0.0 0.0
-              49.0 0.0 0.0'
+    points = ' 9.0 0.0  0.0
+              20.0 0.0 11.0'
     fixed_normal = true
     replace = true
     variance = 1e-6
@@ -71,36 +71,36 @@ quadrature_order = 'FOURTH'
   [./elbow_0]
     type = DirichletBC
     variable = diffused
-    boundary = 'outside'
+    boundary = 'left'
     value = 0
   [../]
 
   [./elbow_1]
     type = DirichletBC
     variable = diffused
-    boundary = 'inside'
+    boundary = 'right'
     value = 1
   [../]
 []
 
-# [UserObjects]
-#   [./view_factor_calculator]
-#     type = RadiationHeatTransferSetup
-#     quadrature_order = ${quadrature_order}
-#     quadrature_type = ${quadrature_type}
-#
-#     execute_on = 'INITIAL'
-#
-#     boundary = 'w_tube_outside plate_front'
-#
-#     occlusion_detection = NONE # BRUTE_FORCE_WITH_BBOX
-#     base_representation = APPROXIMATE
-#     collision_representation = APPROXIMATE
-#     quadrature_representation = APPROXIMATE
-#
-#     precision = 40
-#   [../]
-# []
+[UserObjects]
+  [./view_factor_calculator]
+    type = RadiationHeatTransferSetup
+    quadrature_order = ${quadrature_order}
+    quadrature_type = ${quadrature_type}
+
+    execute_on = 'INITIAL'
+
+    boundary = 'inside'
+
+    occlusion_detection = NONE # BRUTE_FORCE_WITH_BBOX
+    base_representation = APPROXIMATE
+    collision_representation = APPROXIMATE
+    quadrature_representation = APPROXIMATE
+
+    precision = 40
+  [../]
+[]
 
 [Executioner]
   type = Steady
