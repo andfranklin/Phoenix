@@ -69,13 +69,18 @@ def make_elbow(origin, axis_dir, inner_radius, outer_radius, center_of_rot, rot_
     assert inner_radius > 0.0
     assert n_rings > 0
     assert n_sectors > 0
-    assert n_axial > 1
+    assert torus_angle > 0.0
+    assert torus_angle < 2.0 * np.pi
+
+    if torus_angle > quarter_cir:
+        assert n_axial > 1, f"n_axial must be greater than 1 because torus_angle > {quarter_circ}"
+    else:
+        assert n_axial > 0, f"n_axial must be greater than 0"
+
     assert magnitude(axis_dir) > 0.0
     assert magnitude(rot_normal) > 0.0
     torus_radius = magnitude(add(center_of_rot, scale(-1.0, origin)))
     assert torus_radius > outer_radius
-    assert torus_angle > 0.0
-    assert torus_angle < 2.0 * np.pi
 
     axis_dir = normalize(axis_dir)
     rot_normal = normalize(rot_normal)
