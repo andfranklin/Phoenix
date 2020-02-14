@@ -154,6 +154,8 @@ RadiationHeatTransferSetup::threadJoin(const UserObject & /*y*/)
 void
 RadiationHeatTransferSetup::finalize()
 {
+  bool infeasible_vf_warning = false;
+
   for (auto from_bnd_id : _boundary_ids)
   {
     const auto & from_bnd_name = _mesh.getBoundaryName(from_bnd_id);
@@ -181,8 +183,13 @@ RadiationHeatTransferSetup::finalize()
       }
 
       view_factor = view_factor / total_area;
+
+      if (view_factor > 1.0) infeasible_vf_warning = true;
       std::cout << "    view factor : " << std::setprecision(_precision) << view_factor << std::endl << std::endl;
       // std::cout << "  total SA    : " << total_area << std::endl << std::endl;
     }
   }
+
+  if (infeasible_vf_warning)
+    mooseWarning("One or more surface view factors are greater than one. Consider refining the mesh, increasing the quadrature order or both.");
 }
