@@ -1,13 +1,15 @@
 import gmsh
 import physical_params
-from mesh_params import coarse as mesh_params
 
 model = gmsh.model
 
 
-def make_plate(case, ofilename="plate.msh"):
+def make_plate(case, mesh_params, mesh_name):
+    filename_stem = __file__.split(".")[0]
+    case_stem = f"{filename_stem}_{mesh_name}"
+
     gmsh.initialize()
-    model.add(ofilename.replace(".msh", ""))
+    model.add(case_stem)
 
     x_center = 0.0
     y_center = -0.5 * physical_params.l1
@@ -26,10 +28,13 @@ def make_plate(case, ofilename="plate.msh"):
     model.geo.synchronize()
     model.mesh.generate(3)
 
-    gmsh.write(ofilename)
+    gmsh.write(f"{case_stem}.msh")
     gmsh.finalize()
 
 
 if __name__ == "__main__":
     from cases import cases
-    make_plate(cases[31])
+    from mesh_params import coarse, refined
+
+    make_plate(cases[31], coarse, "coarse")
+    make_plate(cases[31], refined, "refined")

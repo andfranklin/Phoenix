@@ -1,5 +1,6 @@
 from cases import cases
 from plate import make_plate
+from mesh_params import coarse, refined
 from script_utils import get_cl_parser, call_phoenix, vf_format, calc_rel_diff
 from tabulate import tabulate
 
@@ -17,7 +18,11 @@ assert case >= 1 and case <= n_cases, err_str
 
 case = cases[case - 1]
 
-make_plate(case)
+if args.mesh == "COARSE":
+    make_plate(case, coarse, "coarse")
+else:
+    make_plate(case, refined, "refined")
+
 vf_matrix = call_phoenix(args)
 
 table = []

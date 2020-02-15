@@ -10,6 +10,8 @@ quad_orders = ["CONSTANT", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH",
                "SEVENTEENTH", "EIGHTTEENTH", "NINTEENTH", "TWENTIETH",
                "DEFAULT"]
 
+meshes = ["COARSE", "REFINED"]
+
 
 def get_cl_parser(description):
     parser = ArgumentParser(description=description)
@@ -19,6 +21,8 @@ def get_cl_parser(description):
                         help='the quadrature type (default: GAUSS)')
     parser.add_argument('--quad-order', choices=quad_orders, default="FIRST",
                         help='the quadrature order (default: FIRST)')
+    parser.add_argument('--mesh', choices=meshes, default="COARSE",
+                        help='the mesh to use (default: COARSE)')
     return parser
 
 
@@ -59,6 +63,7 @@ def call_phoenix(args, quadrature_order="FOURTH"):
     call_list.append(f"refinement_level={args.refinement_level}")
     call_list.append(f"quadrature_type={args.quad_type}")
     call_list.append(f"quadrature_order={args.quad_order}")
+    call_list.append(f"mesh={args.mesh}")
     results = subprocess.check_output(call_list, stderr=subprocess.DEVNULL)
 
     split_results = results.splitlines()

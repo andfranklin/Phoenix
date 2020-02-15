@@ -1,12 +1,12 @@
-case = 'view_factors'
 refinement_level = 0
 quadrature_type = 'GAUSS'
 quadrature_order = 'FIRST'
+mesh = 'coarse'
 
 [Mesh]
   [raw_w_tube]
     type = FileMeshGenerator
-    file = 'w_tube.msh'
+    file = 'w_tube_${mesh}.msh'
   []
 
   [blocking_w_tube]
@@ -38,7 +38,7 @@ quadrature_order = 'FIRST'
 
   [raw_plate]
     type = FileMeshGenerator
-    file = 'plate.msh'
+    file = 'plate_${mesh}.msh'
   []
 
   [plate_blocked]
@@ -157,5 +157,5 @@ quadrature_order = 'FIRST'
 [Outputs]
   execute_on = 'timestep_end'
   exodus = true
-  file_base = '${case}_${refinement_level}_${quadrature_order}_${quadrature_type}'
+  file_base = 'view_factors_${refinement_level}_${quadrature_order}_${quadrature_type}'
 []
