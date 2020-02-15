@@ -17,7 +17,7 @@ headers = ("No.", "s, mm", "a, mm", "b, mm",
            r"F_{0W}^{ref}", r"F_{0W}^{calc}", r"\overline{\Delta F_{0W}}",
            r"F_{W0}^{ref}", r"F_{W0}^{calc}", r"\overline{\Delta F_{W0}}")
 
-table = []
+table_data = []
 for i, (ref, calc) in enumerate(zip(cases, calc_data), 1):
     row = [i, ref["s"], ref["a"], ref["b"]]
     F0W_ref = ref["F0W"]
@@ -29,7 +29,12 @@ for i, (ref, calc) in enumerate(zip(cases, calc_data), 1):
     FW0_calc = calc["w_tube_outside"]["plate_front"]
     delta_FW0 = calc_rel_diff(FW0_ref, FW0_calc)
     row += [vf_format(FW0_ref), vf_format(FW0_calc), delta_FW0]
-    table.append(row)
+    table_data.append(row)
 
-table = tabulate(table, headers=headers, tablefmt="psql")
+table = tabulate(table_data, headers=headers, tablefmt="psql")
 print(table)
+
+latex_table = tabulate(table_data, headers=headers, tablefmt="latex")
+out_file = f"results_{args.mesh.lower()}.latex"
+with open(out_file, "w") as output:
+    output.write(latex_table)
