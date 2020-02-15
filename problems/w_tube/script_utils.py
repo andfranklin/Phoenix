@@ -13,16 +13,21 @@ quad_orders = ["CONSTANT", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH",
 meshes = ["COARSE", "REFINED"]
 
 
-def get_cl_parser(description):
+def get_cased_cl_parser(description):
     parser = ArgumentParser(description=description)
+    parser.add_argument('--mesh', choices=meshes, default="COARSE",
+                        help='the mesh to use (default: COARSE)')
+    return parser
+
+
+def get_cl_parser(description):
+    parser = get_cased_cl_parser(description)
     parser.add_argument("--refinement-level", type=int, default=0,
                         help="the mesh refinement level (default: 0)")
     parser.add_argument('--quad-type', choices=quad_types, default="GAUSS",
                         help='the quadrature type (default: GAUSS)')
     parser.add_argument('--quad-order', choices=quad_orders, default="FIRST",
                         help='the quadrature order (default: FIRST)')
-    parser.add_argument('--mesh', choices=meshes, default="COARSE",
-                        help='the mesh to use (default: COARSE)')
     return parser
 
 

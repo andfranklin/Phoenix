@@ -3,6 +3,7 @@ from plate import make_plate
 from mesh_params import coarse, refined
 from script_utils import get_cl_parser, call_phoenix, vf_format, calc_rel_diff
 from tabulate import tabulate
+import json
 
 description = "Script for running all cases of the w-tube problem."
 parser = get_cl_parser(description)
@@ -13,7 +14,8 @@ parser.add_argument("--quiet", action="store_true",
 args = parser.parse_args()
 verbose = not args.quiet
 
-for i, case in enumerate(cases[:10], 1):
+results = []
+for i, case in enumerate(cases, 1):
     if verbose:
         if i != 1:
             print()
@@ -30,6 +32,7 @@ for i, case in enumerate(cases[:10], 1):
         make_plate(case, refined, "refined")
 
     vf_matrix = call_phoenix(args)
+    results.append(vf_matrix.matrix)
 
     table = []
     plate_to_tube = "plate -> w-tube"
@@ -57,3 +60,7 @@ for i, case in enumerate(cases[:10], 1):
               f"{vf_matrix['plate_front']['w_tube_outside']:.20f}")
         print(f"{tube_to_plate}:",
               f"{vf_matrix['w_tube_outside']['plate_front']:.20f}")
+
+out_name = f"results_{args.mesh.lower()}.json"
+with open(out_name, "w") as output_file:
+    json.dump(results, output_file)
