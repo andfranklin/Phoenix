@@ -40,9 +40,10 @@ rel_diff = calc_rel_diff(ref, calc)
 row = [tube_to_plate, vf_format(ref), vf_format(calc), rel_diff]
 table.append(row)
 
-print(tabulate(table,
-               headers=["View Factor", "Reference",
-                        "Calculated", "Rel. Diff."]))
+table = tabulate(table,
+                 headers=["View Factor", "Reference",
+                          "Calculated", "Rel. Diff."], tablefmt="psql")
+print(table)
 print()
 
 # vf_F0W
