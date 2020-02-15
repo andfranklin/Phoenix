@@ -1,7 +1,8 @@
 case = 'w_tube'
+plate_mesh = ''
 refinement_level = 0
 quadrature_type = 'GAUSS'
-quadrature_order = 'FOURTH'
+quadrature_order = 'FIRST'
 
 [Mesh]
   [raw_w_tube]
@@ -38,7 +39,7 @@ quadrature_order = 'FOURTH'
 
   [raw_plate]
     type = FileMeshGenerator
-    file = 'plate.msh'
+    file = '${plate_mesh}'
   []
 
   [plate_blocked]
@@ -103,14 +104,14 @@ quadrature_order = 'FOURTH'
   [./w_tube_1]
     type = DirichletBC
     variable = diffused
-    boundary = 'w_tube_right'
+    boundary = 'w_tube_inside'
     value = 1
   [../]
 
   [./w_tube_0]
     type = DirichletBC
     variable = diffused
-    boundary = 'w_tube_left'
+    boundary = 'w_tube_outside'
     value = 0
   [../]
 
@@ -151,6 +152,7 @@ quadrature_order = 'FOURTH'
 [Executioner]
   type = Steady
   solve_type = 'PJFNK'
+  nl_abs_tol = 1e3
 []
 
 [Outputs]

@@ -1,33 +1,34 @@
 import gmsh
-import sys
-from parameters import l1, a, b, s, thickness
-from parameters import n_x, n_y, n_z
+import parameters as params
 
 model = gmsh.model
-factory = model.occ
 
-FILENAME_STEM = __file__.split(".")[0]
-MSH_FILENAME = f"{FILENAME_STEM}.msh"
 
-gmsh.initialize(sys.argv)
+def make_plate(case, ofilename):
+    gmsh.initialize()
+    model.add(ofilename.replace(".msh", ""))
 
-gmsh.option.setNumber("General.Terminal", 1)
+    x_center = 0.0
+    y_center = -0.5 * params.l1
 
-model.add(FILENAME_STEM)
+    bl_x = x_center - (0.5 * case["a"])
+    bl_y = y_center - (0.5 * case["b"])
 
-x_center = 0.0
-y_center = -0.5 * l1
+    point = model.geo.addPoint(bl_x, bl_y, -case["s"])
+    line = model.geo.extrude([(0, point)], case["a"], 0.0, 0.0, [params.n_x],
+                             recombine=True)
+    surf = model.geo.extrude([line[1]], 0.0, case["b"], 0.0,
+                             numElements=[params.n_y], recombine=True)
+    model.geo.extrude(surf, 0.0, 0.0, -4.0 * params.thickness,
+                      numElements=[params.n_z], recombine=True)
 
-bl_x = x_center - (0.5 * a)
-bl_y = y_center - (0.5 * b)
+    model.geo.synchronize()
+    model.mesh.generate(3)
 
-point = model.geo.addPoint(bl_x, bl_y, -s)
-line = model.geo.extrude([(0, point)], a, 0.0, 0.0, [n_x], recombine=True)
-surf = model.geo.extrude([line[1]], 0.0, b, 0.0, numElements=[n_y], recombine=True)
-model.geo.extrude(surf, 0.0, 0.0, -4.0 * thickness, numElements=[n_z], recombine=True)
+    gmsh.write(ofilename)
+    gmsh.finalize()
 
-model.geo.synchronize()
-model.mesh.generate(3)
 
-gmsh.write(MSH_FILENAME)
-gmsh.finalize()
+if __name__ == "__main__":
+    from cases import cases
+    make_plate(cases[31], __file__.replace(".py", ".msh"))
