@@ -1,5 +1,4 @@
-case = 'w_tube'
-plate_mesh = ''
+case = 'view_factors'
 refinement_level = 0
 quadrature_type = 'GAUSS'
 quadrature_order = 'FIRST'
@@ -39,7 +38,7 @@ quadrature_order = 'FIRST'
 
   [raw_plate]
     type = FileMeshGenerator
-    file = '${plate_mesh}'
+    file = 'plate.msh'
   []
 
   [plate_blocked]

@@ -1,4 +1,25 @@
 import subprocess
+from argparse import ArgumentParser
+
+quad_types = ["CLOUGH", "CONICAL", "GAUSS", "GRID", "MONOMIAL",
+              "SIMPSON", "TRAP", "GAUSS_LOBATTO", "DEFAULT"]
+
+quad_orders = ["CONSTANT", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH",
+               "SIXTH", "SEVENTH", "EIGHTH", "NINTH", "TENTH", "ELEVENTH",
+               "TWELFTH", "THIRTEENTH", "FOURTEENTH", "FIFTEENTH", "SIXTEENTH",
+               "SEVENTEENTH", "EIGHTTEENTH", "NINTEENTH", "TWENTIETH",
+               "DEFAULT"]
+
+
+def get_cl_parser(description):
+    parser = ArgumentParser(description=description)
+    parser.add_argument("--refinement-level", type=int, default=0,
+                        help="the mesh refinement level (default: 0)")
+    parser.add_argument('--quad-type', choices=quad_types, default="GAUSS",
+                        help='the quadrature type (default: GAUSS)')
+    parser.add_argument('--quad-order', choices=quad_orders, default="FIRST",
+                        help='the quadrature order (default: FIRST)')
+    return parser
 
 
 def is_viewfactor_line(line):
@@ -32,15 +53,13 @@ class VFMatrix:
         return self.matrix[key]
 
 
-def call_phoenix(refinement_level=0,
-                 quadrature_type="GAUSS", quadrature_order="FOURTH",
-                 plate_filename="plate.msh"):
+def call_phoenix(args, quadrature_order="FOURTH"):
+    assert args.refinement_level >= 0
     call_list = ["../../phoenix-opt", "-i", f"view_factors.i"]
-    call_list.append(f"refinement_level={refinement_level}")
-    call_list.append(f"quadrature_type={quadrature_type}")
-    call_list.append(f"quadrature_order={quadrature_order}")
-    call_list.append(f"plate_mesh={plate_filename}")
-    results = subprocess.check_output(call_list)
+    call_list.append(f"refinement_level={args.refinement_level}")
+    call_list.append(f"quadrature_type={args.quad_type}")
+    call_list.append(f"quadrature_order={args.quad_order}")
+    results = subprocess.check_output(call_list, stderr=subprocess.DEVNULL)
 
     split_results = results.splitlines()
     vf_lines = list(filter(is_viewfactor_line, split_results))
