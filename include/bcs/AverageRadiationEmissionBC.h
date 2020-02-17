@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RadiationBC.h"
+#include "AverageRadiationFluxHelper.h"
 
 class AverageRadiationEmissionBC;
 
@@ -16,15 +17,8 @@ public:
   static InputParameters validParams();
   AverageRadiationEmissionBC(const InputParameters & parameters);
 
-  virtual void computeResidual() override;
-  virtual void computeJacobian() override;
-
 protected:
-  Real _T4_avg;
-  DenseVector<Real> _T4_avg_dT;
-
-  virtual void computeResidualSetup();
-  virtual void computeJacobianSetup();
+  const AverageRadiationFluxHelper & _avg_rad_flux_helper;
 
   virtual Real computeQpResidual() override;
   virtual Real computeQpJacobian() override;

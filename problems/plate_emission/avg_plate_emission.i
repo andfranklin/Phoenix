@@ -42,6 +42,14 @@
   [../]
 []
 
+[UserObjects]
+  [./avg_rad_flux_helper]
+    type = AverageRadiationFluxHelper
+    variable = T
+    boundary = 'right'
+  [../]
+[]
+
 [BCs]
   [./left]
     type = DirichletBC
@@ -54,6 +62,7 @@
   # @ 4s when q_dot=1000
   [./right]
     type = AverageRadiationEmissionBC
+    avg_rad_flux_helper = avg_rad_flux_helper
     variable = T
     boundary = 'right'
   [../]
