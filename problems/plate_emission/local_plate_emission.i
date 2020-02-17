@@ -50,13 +50,8 @@
     value = 300.0
   [../]
 
-  # [./right] # 550K @ 2s when q_dot=500
-  #   type = NeumannBC
-  #   variable = T
-  #   boundary = 'right'
-  #   value = 0.0
-  # [../]
-
+  # 305K @ right and 427.5K @ center
+  # @ 4s when q_dot=1000
   [./right]
     type = LocalRadiationEmissionBC
     variable = T
