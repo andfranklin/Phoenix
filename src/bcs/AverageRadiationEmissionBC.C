@@ -58,7 +58,7 @@ AverageRadiationEmissionBC::computeJacobianSetup()
     for (_qp = 0; _qp < _qrule->n_points(); _qp++)
     {
       tmp = _u[_qp] * _u[_qp] * _u[_qp];
-      _T4_avg_dT(_j) += _JxW[_qp] * _coord[_qp] * 4.0 * tmp;
+      _T4_avg_dT(_j) += _JxW[_qp] * _coord[_qp] * 4.0 * tmp * _phi[_j][_qp];
     }
     _T4_avg_dT(_j) = _T4_avg_dT(_j) / elem_area;
   }
