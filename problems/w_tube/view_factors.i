@@ -135,8 +135,6 @@ mesh = 'coarse'
     quadrature_order = ${quadrature_order}
     quadrature_type = ${quadrature_type}
 
-    execute_on = 'INITIAL'
-
     boundary = 'w_tube_outside plate_front'
 
     occlusion_detection = NONE # BRUTE_FORCE_WITH_BBOX

@@ -124,7 +124,6 @@ refinement_level = 1
     # quadrature_order = CONSTANT
     quadrature_type = GAUSS
 
-    execute_on = 'INITIAL'
     boundary = 'lp_front rp_back'
 
     occlusion_detection = NONE

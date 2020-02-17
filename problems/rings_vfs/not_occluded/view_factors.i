@@ -121,7 +121,6 @@ quadrature_order = 'FOURTH'
     quadrature_order = ${quadrature_order}
     quadrature_type = ${quadrature_type}
 
-    execute_on = 'INITIAL'
     boundary = 'br_top tr_bottom'
 
     occlusion_detection = NONE

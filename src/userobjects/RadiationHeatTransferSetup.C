@@ -40,6 +40,10 @@ validParams<RadiationHeatTransferSetup>()
 
   params.addParam<unsigned int>("precision", 5, "Precision to which the output should be printed");
 
+  ExecFlagEnum exec_enum = MooseUtils::getDefaultExecFlagEnum();
+  exec_enum  = EXEC_INITIAL;
+  params.set<ExecFlagEnum>("execute_on", true) = exec_enum;
+
   return params;
 }
 

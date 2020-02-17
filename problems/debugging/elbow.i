@@ -89,8 +89,6 @@ quadrature_order = 'FOURTH'
     quadrature_order = ${quadrature_order}
     quadrature_type = ${quadrature_type}
 
-    execute_on = 'INITIAL'
-
     boundary = 'inside'
 
     occlusion_detection = NONE # BRUTE_FORCE_WITH_BBOX
