@@ -1,5 +1,4 @@
-#ifndef NOOCCLUSIONSURFACECONNECTOR_H
-#define NOOCCLUSIONSURFACECONNECTOR_H
+#pragma once
 
 #include "SurfaceConnector.h"
 
@@ -29,5 +28,3 @@ NoOcclusionSurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::isOccluded
   return false;
 }
 }
-
-#endif /* NOOCCLUSIONSURFACECONNECTOR_H */

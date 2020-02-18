@@ -12,8 +12,11 @@ public:
 
   bool operator==(const SurfaceID & other) const;
 
-  const libMesh::unique_id_type elem_id;
-  const unsigned int side_id;
+protected:
+  libMesh::unique_id_type elem_id;
+  unsigned int side_id;
+
+  friend class SurfaceIDHash;
 };
 
 struct SurfaceIDHash {

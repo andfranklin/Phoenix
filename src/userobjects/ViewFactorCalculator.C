@@ -1,7 +1,6 @@
 #include "ViewFactorCalculator.h"
 #include "Conversion.h"
 #include "Assembly.h"
-#include "SurfaceID.h"
 
 registerMooseObject("PhoenixApp", ViewFactorCalculator);
 
@@ -64,17 +63,19 @@ ViewFactorCalculator::ViewFactorCalculator(const InputParameters & parameters)
     _collision_repr(getParam<MooseEnum>("collision_representation")),
 
     _boundary_ids(boundaryIDs()),
-    _boundary_index_sets(),
+    _boundary_surf_id_sets(),
 
     _surface_connector(nullptr),
-    _current_surface_index(0),
 
     _precision(getParam<unsigned int>("precision"))
 {
   setupSurfaceConnector();
 
   for (auto & boundary_id : _boundary_ids)
-    _boundary_index_sets[boundary_id] = {};
+  {
+    std::vector<SurfaceID> surf_ids;
+    _boundary_surf_id_sets[boundary_id] = surf_ids;
+  }
 }
 
 ViewFactorCalculator::~ViewFactorCalculator()
@@ -112,7 +113,6 @@ ViewFactorCalculator::getQuadratureDimension()
 void
 ViewFactorCalculator::initialize()
 {
-  _current_surface_index = 0;
 }
 
 void
@@ -126,33 +126,20 @@ ViewFactorCalculator::execute()
     _surface_connector->initializeQuadratures();
   }
 
+  SurfaceID surf_id = {*_current_elem, _current_side};
   BoundaryID current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
-  _boundary_index_sets[current_boundary_id].push_back(_current_surface_index);
-
-  // std::cout << "making surface" << std::endl;
-  // std::cout << "current boundary id   : " << current_boundary_id << std::endl;
-  // std::cout << "current elem uid      : " << _current_elem->unique_id() << std::endl;
-  // std::cout << "current surface index : " << _current_side << std::endl;
-  // std::cout << std::endl;
-  //
-  // Geom::SurfaceID test(_current_elem->unique_id(), _current_side);
-  //
-  // std::cout << "test.elem_id : " << test.elem_id << std::endl;
-  // std::cout << "test.side_id : " << test.side_id << std::endl;
-  // std::cout << "hash         : " << Geom::SurfaceIDHash()(test) << std::endl;
-  // std::cout << std::endl;
-
+  _boundary_surf_id_sets[current_boundary_id].push_back(surf_id);
 
   switch (_current_side_elem->n_vertices())
   {
     case 3:
     {
-      _surface_connector->buildSurface(getVertex(0), getVertex(1), getVertex(2));
+      _surface_connector->buildSurface(surf_id, getVertex(0), getVertex(1), getVertex(2));
       break;
     }
     case 4:
     {
-      _surface_connector->buildSurface(getVertex(0), getVertex(1), getVertex(2), getVertex(3));
+      _surface_connector->buildSurface(surf_id, getVertex(0), getVertex(1), getVertex(2), getVertex(3));
       break;
     }
     default:
@@ -161,8 +148,6 @@ ViewFactorCalculator::execute()
       break;
     }
   }
-
-  ++_current_surface_index;
 }
 
 void
@@ -178,25 +163,25 @@ ViewFactorCalculator::finalize()
   for (auto from_bnd_id : _boundary_ids)
   {
     const auto & from_bnd_name = _mesh.getBoundaryName(from_bnd_id);
-    const auto & from_bnd_inxs = _boundary_index_sets[from_bnd_id];
+    const auto & from_bnd_surf_ids = _boundary_surf_id_sets[from_bnd_id];
 
-    std::cout << from_bnd_name << " (" << from_bnd_id << ") : " << from_bnd_inxs.size() << std::endl;
+    std::cout << from_bnd_name << " (" << from_bnd_id << ") : " << from_bnd_surf_ids.size() << std::endl;
 
     for (auto to_bnd_id : _boundary_ids)
     {
       const auto & to_bnd_name = _mesh.getBoundaryName(to_bnd_id);
-      const auto & to_bnd_inxs = _boundary_index_sets[to_bnd_id];
+      const auto & to_bnd_surf_ids = _boundary_surf_id_sets[to_bnd_id];
       std::cout << "  " << from_bnd_name << " -> " << to_bnd_name << std::endl;
 
       Real total_area = 0.0;
       Real view_factor = 0.0;
-      for (auto from_index : from_bnd_inxs) {
+      for (const auto & from_surf_id : from_bnd_surf_ids) {
 
-        Real outer_area = _surface_connector->getArea(from_index);
+        Real outer_area = _surface_connector->getArea(from_surf_id);
         total_area += outer_area;
 
-        for (auto to_index : to_bnd_inxs) {
-          Real intermediate = _surface_connector->getViewFactor(from_index, to_index);
+        for (const auto & to_surf_id : to_bnd_surf_ids) {
+          Real intermediate = _surface_connector->getViewFactor(from_surf_id, to_surf_id);
           view_factor += outer_area * intermediate;
         }
       }

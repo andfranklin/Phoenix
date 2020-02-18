@@ -69,15 +69,17 @@ protected:
     node_1 = libMesh::Node::build(0.0, 0.0, 0.0, 1).release();
     node_2 = libMesh::Node::build(1.0, 0.0, 0.0, 2).release();
     node_3 = libMesh::Node::build(0.0, 1.0, 0.0, 3).release();
-    _coarse_surface_connector->buildSurface(node_1, node_2, node_3);
-    _fine_surface_connector->buildSurface(node_1, node_2, node_3);
+    SurfaceID surf_id = {0, 0};
+    _coarse_surface_connector->buildSurface(surf_id, node_1, node_2, node_3);
+    _fine_surface_connector->buildSurface(surf_id, node_1, node_2, node_3);
 
     // Triangle 2 (surface 1)
     node_4 = libMesh::Node::build(0.0, 0.0, 1.0, 4).release();
     node_5 = libMesh::Node::build(0.0, 1.0, 1.0, 5).release();
     node_6 = libMesh::Node::build(1.0, 0.0, 1.0, 6).release();
-    _coarse_surface_connector->buildSurface(node_4, node_5, node_6);
-    _fine_surface_connector->buildSurface(node_4, node_5, node_6);
+    surf_id = {1, 0};
+    _coarse_surface_connector->buildSurface(surf_id, node_4, node_5, node_6);
+    _fine_surface_connector->buildSurface(surf_id, node_4, node_5, node_6);
 
     // Triangle 3 (surface 2)
     // (facing in the same direction as Triangle 1)
@@ -86,8 +88,9 @@ protected:
     node_7 = libMesh::Node::build(2.5, 0.0, 1.0, 7).release();
     node_8 = libMesh::Node::build(3.5, 0.0, 1.0, 8).release();
     node_9 = libMesh::Node::build(2.5, 1.0, 1.0, 9).release();
-    _coarse_surface_connector->buildSurface(node_7, node_8, node_9);
-    _fine_surface_connector->buildSurface(node_7, node_8, node_9);
+    surf_id = {2, 0};
+    _coarse_surface_connector->buildSurface(surf_id, node_7, node_8, node_9);
+    _fine_surface_connector->buildSurface(surf_id, node_7, node_8, node_9);
 
     // The squares have a similar setup to the triangles except they
     // are shifted in the positive y-direction 5 units. They have a
@@ -98,16 +101,18 @@ protected:
     node_11 = libMesh::Node::build(2.0, 5.0, 0.0, 11).release();
     node_12 = libMesh::Node::build(2.0, 7.0, 0.0, 12).release();
     node_13 = libMesh::Node::build(0.0, 7.0, 0.0, 13).release();
-    _coarse_surface_connector->buildSurface(node_10, node_11, node_12, node_13);
-    _fine_surface_connector->buildSurface(node_10, node_11, node_12, node_13);
+    surf_id = {3, 0};
+    _coarse_surface_connector->buildSurface(surf_id, node_10, node_11, node_12, node_13);
+    _fine_surface_connector->buildSurface(surf_id, node_10, node_11, node_12, node_13);
 
     // Square 2 (surface 4)
     node_14 = libMesh::Node::build(0.0, 5.0, 1.0, 14).release();
     node_15 = libMesh::Node::build(0.0, 7.0, 1.0, 15).release();
     node_16 = libMesh::Node::build(2.0, 7.0, 1.0, 16).release();
     node_17 = libMesh::Node::build(2.0, 5.0, 1.0, 17).release();
-    _coarse_surface_connector->buildSurface(node_14, node_15, node_16, node_17);
-    _fine_surface_connector->buildSurface(node_14, node_15, node_16, node_17);
+    surf_id = {4, 0};
+    _coarse_surface_connector->buildSurface(surf_id, node_14, node_15, node_16, node_17);
+    _fine_surface_connector->buildSurface(surf_id, node_14, node_15, node_16, node_17);
 
     // Square 3 (surface 5)
     // (facing in the same direction as Square 1)
@@ -117,8 +122,9 @@ protected:
     node_19 = libMesh::Node::build(4.5, 5.0, 1.0, 19).release();
     node_20 = libMesh::Node::build(4.5, 7.0, 1.0, 20).release();
     node_21 = libMesh::Node::build(2.5, 7.0, 1.0, 21).release();
-    _coarse_surface_connector->buildSurface(node_18, node_19, node_20, node_21);
-    _fine_surface_connector->buildSurface(node_18, node_19, node_20, node_21);
+    surf_id = {5, 0};
+    _coarse_surface_connector->buildSurface(surf_id, node_18, node_19, node_20, node_21);
+    _fine_surface_connector->buildSurface(surf_id, node_18, node_19, node_20, node_21);
 
     delete node_1;
     delete node_2;
@@ -186,12 +192,15 @@ TYPED_TEST(SurfaceViewFactorTests, TriTriCoarse)
   constexpr double solution = 0.115049228149610507920819202354;
   constexpr double abs_tol = 5.0e-3;
 
+  SurfaceID triangle1 = {0, 0};
+  SurfaceID triangle2 = {1, 0};
+
   EXPECT_NEAR(
-      this->_coarse_surface_connector->getViewFactor(0, 1),
+      this->_coarse_surface_connector->getViewFactor(triangle1, triangle2),
       solution,
       abs_tol);
   EXPECT_NEAR(
-      this->_coarse_surface_connector->getViewFactor(1, 0),
+      this->_coarse_surface_connector->getViewFactor(triangle2, triangle1),
       solution,
       abs_tol);
 }
@@ -203,10 +212,13 @@ TYPED_TEST(SurfaceViewFactorTests, TriTriFine)
   constexpr double solution = 0.115049228149610507920819202354;
   constexpr double abs_tol = 1.0e-11;
 
-  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(0, 1),
+  SurfaceID triangle1 = {0, 0};
+  SurfaceID triangle2 = {1, 0};
+
+  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(triangle1, triangle2),
               solution,
               abs_tol);
-  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(1, 0),
+  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(triangle2, triangle1),
               solution,
               abs_tol);
 }
@@ -215,11 +227,14 @@ TYPED_TEST(SurfaceViewFactorTests, TriTriDegenerate)
 {
   constexpr double solution = 0.0;
 
+  SurfaceID triangle1 = {0, 0};
+  SurfaceID triangle3 = {2, 0};
+
   EXPECT_DOUBLE_EQ(
-      this->_coarse_surface_connector->getViewFactor(0, 2),
+      this->_coarse_surface_connector->getViewFactor(triangle1, triangle3),
       solution);
   EXPECT_DOUBLE_EQ(
-      this->_coarse_surface_connector->getViewFactor(2, 0),
+      this->_coarse_surface_connector->getViewFactor(triangle3, triangle1),
       solution);
 }
 
@@ -228,12 +243,15 @@ TYPED_TEST(SurfaceViewFactorTests, QuadQuadCoarse)
   constexpr double solution = 0.415253283577146636851296079839; // analytic solution
   constexpr double abs_tol = 5.0e-2;
 
+  SurfaceID square1 = {3, 0};
+  SurfaceID square2 = {4, 0};
+
   EXPECT_NEAR(
-      this->_coarse_surface_connector->getViewFactor(3, 4),
+      this->_coarse_surface_connector->getViewFactor(square1, square2),
       solution,
       abs_tol);
   EXPECT_NEAR(
-      this->_coarse_surface_connector->getViewFactor(4, 3),
+      this->_coarse_surface_connector->getViewFactor(square2, square1),
       solution,
       abs_tol);
 }
@@ -243,10 +261,13 @@ TYPED_TEST(SurfaceViewFactorTests, QuadQuadFine)
   constexpr double solution = 0.415253283577146636851296079839; // analytic solution
   constexpr double abs_tol = 1.0e-6;
 
-  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(3, 4),
+  SurfaceID square1 = {3, 0};
+  SurfaceID square2 = {4, 0};
+
+  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(square1, square2),
               solution,
               abs_tol);
-  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(4, 3),
+  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(square2, square1),
               solution,
               abs_tol);
 }
@@ -255,11 +276,14 @@ TYPED_TEST(SurfaceViewFactorTests, QuadQuadDegenerate)
 {
   constexpr double solution = 0.0;
 
+  SurfaceID square1 = {3, 0};
+  SurfaceID square3 = {5, 0};
+
   EXPECT_DOUBLE_EQ(
-      this->_coarse_surface_connector->getViewFactor(3, 5),
+      this->_coarse_surface_connector->getViewFactor(square1, square3),
       solution);
   EXPECT_DOUBLE_EQ(
-      this->_coarse_surface_connector->getViewFactor(5, 3),
+      this->_coarse_surface_connector->getViewFactor(square3, square1),
       solution);
 }
 
@@ -271,12 +295,15 @@ TYPED_TEST(SurfaceViewFactorTests, TriQuadCoarse)
   constexpr double solution_4_to_0 = (solution_0_to_4 * 0.5) / 4.0;
   constexpr double abs_tol = 1.0e-5;
 
+  SurfaceID triangle1 = {0, 0};
+  SurfaceID square2   = {4, 0};
+
   EXPECT_NEAR(
-      this->_coarse_surface_connector->getViewFactor(0, 4),
+      this->_coarse_surface_connector->getViewFactor(triangle1, square2),
       solution_0_to_4,
       abs_tol);
   EXPECT_NEAR(
-      this->_coarse_surface_connector->getViewFactor(4, 0),
+      this->_coarse_surface_connector->getViewFactor(square2, triangle1),
       solution_4_to_0,
       abs_tol);
 }
@@ -289,10 +316,13 @@ TYPED_TEST(SurfaceViewFactorTests, TriQuadFine)
   constexpr double solution_4_to_0 = (solution_0_to_4 * 0.5) / 4.0;
   constexpr double abs_tol = 1.0e-15;
 
-  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(0, 4),
+  SurfaceID triangle1 = {0, 0};
+  SurfaceID square2   = {4, 0};
+
+  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(triangle1, square2),
               solution_0_to_4,
               abs_tol);
-  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(4, 0),
+  EXPECT_NEAR(this->_fine_surface_connector->getViewFactor(square2, triangle1),
               solution_4_to_0,
               abs_tol);
 }

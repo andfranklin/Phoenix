@@ -1,5 +1,6 @@
-#ifndef SURFACECONNECTORBASE_H
-#define SURFACECONNECTORBASE_H
+#pragma once
+
+#include "SurfaceID.h"
 
 namespace libMesh
 {
@@ -20,11 +21,11 @@ public:
   SurfaceConnectorBase() {};
   virtual ~SurfaceConnectorBase() {}
 
-  virtual libMesh::Real getViewFactor(unsigned int from_surf_index, unsigned int to_surf_index) = 0;
-  virtual libMesh::Real getArea(unsigned int surf_index) = 0;
+  virtual libMesh::Real getViewFactor(const SurfaceID & from_surf_id, const SurfaceID & to_surf_id) = 0;
+  virtual libMesh::Real getArea(const SurfaceID & from_surf_id) = 0;
 
-  virtual void buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) = 0;
-  virtual void buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d) = 0;
+  virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) = 0;
+  virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d) = 0;
 
   virtual void setQuadratureType(const libMesh::QuadratureType & quadrature_type) = 0;
   virtual void setQuadratureOrder(const libMesh::Order & quadrature_order) = 0;
@@ -34,5 +35,3 @@ public:
 };
 
 }
-
-#endif /* SURFACECONNECTORBASE_H */

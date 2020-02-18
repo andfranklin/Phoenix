@@ -1,5 +1,4 @@
-#ifndef SURFACECONNECTOR_H
-#define SURFACECONNECTOR_H
+#pragma once
 
 #include "SurfaceConnectorBase.h"
 #include "SurfaceWarehouse.h"
@@ -12,15 +11,17 @@ template <class BaseKernel, class QuadKernel, class CollisionKernel>
 class SurfaceConnector : public SurfaceConnectorBase
 {
 public:
+  using SurfacePointer = std::shared_ptr<SurfaceBase<BaseKernel>>;
+
   SurfaceConnector();
   virtual ~SurfaceConnector() {}
 
-  virtual libMesh::Real getViewFactor(unsigned int from_surf_index, unsigned int to_surf_index) override;
+  virtual libMesh::Real getViewFactor(const SurfaceID & from_surf_id, const SurfaceID & to_surf_id) override;
 
-  virtual libMesh::Real getArea(unsigned int surf_index) override;
+  virtual libMesh::Real getArea(const SurfaceID & from_surf_id) override;
 
-  virtual void buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) override;
-  virtual void buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d) override;
+  virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) override;
+  virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d) override;
 
   virtual void setQuadratureType(const libMesh::QuadratureType & quadrature_type) override;
   virtual void setQuadratureOrder(const libMesh::Order & quadrature_order) override;
@@ -33,19 +34,15 @@ protected:
 
   virtual bool isOccluded(const Segment<BaseKernel> & path) = 0;
 
-  libMesh::Real calculateViewFactor(const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
-                                    const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf);
-
-  libMesh::Real getViewFactor(const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
-                              const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf);
+  libMesh::Real calculateViewFactor(const SurfacePointer from_surf, const SurfacePointer to_surf);
+  libMesh::Real getViewFactor(const SurfacePointer from_surf, const SurfacePointer to_surf);
 
 protected:
-  using surface_ptr_t = std::shared_ptr<SurfaceBase<BaseKernel>>;
-  SymmetricDualMap<surface_ptr_t, libMesh::Real> _view_factor_residuals;
+  SymmetricDualMap<SurfacePointer, libMesh::Real> _view_factor_residuals;
   SurfaceWarehouse<BaseKernel> _surface_warehouse;
 
-  std::shared_ptr<SurfaceBase<BaseKernel>> _from_surf;
-  std::shared_ptr<SurfaceBase<BaseKernel>> _to_surf;
+  SurfacePointer _from_surf;
+  SurfacePointer _to_surf;
 
   typename QuadKernel::Vector_3 _from_normal;
   typename QuadKernel::Vector_3 _to_normal;
@@ -93,16 +90,16 @@ SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::initializeQuadratures
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 inline void
-SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c)
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c)
 {
-  _surface_warehouse.buildSurface(a, b, c);
+  _surface_warehouse.buildSurface(surf_id, a, b, c);
 }
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 inline void
-SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d)
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d)
 {
-  _surface_warehouse.buildSurface(a, b, c, d);
+  _surface_warehouse.buildSurface(surf_id, a, b, c, d);
 }
 
 // Assumes that the surface normals are the same over the entire surface
@@ -117,9 +114,7 @@ SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::calculateViewFactorKe
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 inline libMesh::Real
-SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::calculateViewFactor(
-    const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
-    const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf)
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::calculateViewFactor(const SurfacePointer from_surf, const SurfacePointer to_surf)
 {
   bool not_connected = true;
   libMesh::Real residual = 0.0;
@@ -168,9 +163,7 @@ SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::calculateViewFactor(
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 libMesh::Real
-SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getViewFactor(
-    const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
-    const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf)
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getViewFactor(const SurfacePointer from_surf, const SurfacePointer to_surf)
 {
   libMesh::Real residual = 0.0;
 
@@ -187,27 +180,28 @@ SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getViewFactor(
     }
   }
 
+  // if (residual != 0.0)
+  //   std::cout << "Need to update connectivity matrix" << std::endl;
+
   return residual / from_surf->getArea();
 }
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 libMesh::Real
 SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getViewFactor(
-  unsigned int from_surf_index, unsigned int to_surf_index)
+  const SurfaceID & from_surf_id, const SurfaceID & to_surf_id)
 {
-  const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf(_surface_warehouse.getSurface(from_surf_index));
-  const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf(_surface_warehouse.getSurface(to_surf_index));
+  const SurfacePointer from_surf(_surface_warehouse.getSurface(from_surf_id));
+  const SurfacePointer to_surf(_surface_warehouse.getSurface(to_surf_id));
   return getViewFactor(from_surf, to_surf);
 }
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 libMesh::Real
-SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getArea(unsigned int surf_index)
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getArea(const SurfaceID & from_surf_id)
 {
-  const std::shared_ptr<SurfaceBase<BaseKernel>> surf(_surface_warehouse.getSurface(surf_index));
+  const SurfacePointer surf(_surface_warehouse.getSurface(from_surf_id));
   return surf->getArea();
 }
 
 }
-
-#endif /* SURFACECONNECTOR_H */

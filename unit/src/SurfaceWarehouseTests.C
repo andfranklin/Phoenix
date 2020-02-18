@@ -40,7 +40,8 @@ TYPED_TEST(SurfaceWarehouseTests, buildTriangleSurface)
   libMesh::Node * node_2 = libMesh::Node::build(2.0, 0.0, 0.0, 2).release();
   libMesh::Node * node_3 = libMesh::Node::build(0.0, 2.0, 0.0, 3).release();
 
-  this->_surface_warehouse->buildSurface(node_1, node_2, node_3);
+  SurfaceID surf_id = {0, 0};
+  this->_surface_warehouse->buildSurface(surf_id, node_1, node_2, node_3);
   std::shared_ptr<SurfaceBase<TypeParam>> triangle = this->_surface_warehouse->getSurfaces()[0];
 
   delete node_1;
@@ -78,7 +79,8 @@ TYPED_TEST(SurfaceWarehouseTests, buildQuadrilateralSurface)
   libMesh::Node * node_3 = libMesh::Node::build(2.0, 5.0, 0.0, 3).release();
   libMesh::Node * node_4 = libMesh::Node::build(0.0, 5.0, 0.0, 4).release();
 
-  this->_surface_warehouse->buildSurface(node_1, node_2, node_3, node_4);
+  SurfaceID surf_id = {0, 0};
+  this->_surface_warehouse->buildSurface(surf_id, node_1, node_2, node_3, node_4);
   std::shared_ptr<SurfaceBase<TypeParam>> quadrilateral =
       this->_surface_warehouse->getSurfaces()[0];
 

@@ -1,5 +1,4 @@
-#ifndef BRUTEFORCEWITHOUTBBCSURFACECONNECTOR_H
-#define BRUTEFORCEWITHOUTBBCSURFACECONNECTOR_H
+#pragma once
 
 #include "SurfaceConnector.h"
 
@@ -33,5 +32,3 @@ BruteForceWithoutBBCSurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::i
   return false;
 }
 }
-
-#endif /* BRUTEFORCEWITHOUTBBCSURFACECONNECTOR_H */

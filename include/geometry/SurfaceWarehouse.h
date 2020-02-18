@@ -1,9 +1,10 @@
-#ifndef SURFACEWAREHOUSE_H
-#define SURFACEWAREHOUSE_H
+#pragma once
 
 #include "TriangleSurface.h"
 #include "QuadrilateralSurface.h"
 #include "libmesh/quadrature.h"
+#include "SurfaceID.h"
+#include <unordered_map>
 
 // Builds and stores surfaces provided appropriately ordered nodes.
 // Also responsible for initializing quadratures because surfaces
@@ -16,7 +17,9 @@ template <class T>
 class SurfaceWarehouse
 {
 public:
-  SurfaceWarehouse(unsigned int n_surfaces = 0);
+  using SurfacePointer = std::shared_ptr<SurfaceBase<T>>;
+
+  SurfaceWarehouse();
   virtual ~SurfaceWarehouse() {}
 
   void setQuadratureType(const libMesh::QuadratureType & quadrature_type);
@@ -25,15 +28,19 @@ public:
   void initializeQuadratures();
   bool quadraturesNotInitialized() {return !_quadratures_initialized;}
 
-  void buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c);
+  void buildSurface(const SurfaceID & surf_id,
+                    const libMesh::Node * a,
+                    const libMesh::Node * b,
+                    const libMesh::Node * c);
 
-  void buildSurface(const libMesh::Node * a,
+  void buildSurface(const SurfaceID & surf_id,
+                    const libMesh::Node * a,
                     const libMesh::Node * b,
                     const libMesh::Node * c,
                     const libMesh::Node * d);
 
-  std::shared_ptr<SurfaceBase<T>> getSurface(unsigned int surf_index) const { return _surfaces[surf_index]; }
-  const std::vector<std::shared_ptr<SurfaceBase<T>>> & getSurfaces() const { return _surfaces; }
+  SurfacePointer getSurface(const SurfaceID & surf_id) const { return _surfaces.at(surf_id); }
+  std::vector<SurfacePointer> getSurfaces() const;
   inline unsigned int getNumberOfSurfaces() const { return _surfaces.size(); }
 
 protected:
@@ -52,14 +59,27 @@ protected:
   std::shared_ptr<libMesh::QBase> _quadrilateral_quadrature;
 
   VertexWarehouse<T> _vertex_warehouse;
-  std::vector<std::shared_ptr<SurfaceBase<T>>> _surfaces;
+  std::unordered_map<SurfaceID, SurfacePointer, SurfaceIDHash> _surfaces;
 };
 
 template <class T>
-SurfaceWarehouse<T>::SurfaceWarehouse(unsigned int n_surfaces)
-  : _quadrature_type_set(false), _quadrature_order_set(false), _quadratures_initialized(false)
+SurfaceWarehouse<T>::SurfaceWarehouse()
+: _quadrature_type_set(false),
+  _quadrature_order_set(false),
+  _quadrature_dimension_set(false),
+  _quadratures_initialized(false)
 {
-  _surfaces.reserve(n_surfaces);
+}
+
+template <class T>
+std::vector<typename SurfaceWarehouse<T>::SurfacePointer>
+SurfaceWarehouse<T>::getSurfaces() const
+{
+  std::vector<SurfacePointer> surfaces;
+  surfaces.reserve(_surfaces.size());
+  for (auto item : _surfaces)
+    surfaces.push_back(item.second);
+  return std::move(surfaces);
 }
 
 template <class T>
@@ -86,11 +106,11 @@ SurfaceWarehouse<T>::setQuadratureOrder(const libMesh::Order & quadrature_order)
 
 template <class T>
 void
-SurfaceWarehouse<T>::setQuadratureDimension(const unsigned int quadrature_order)
+SurfaceWarehouse<T>::setQuadratureDimension(const unsigned int quadrature_dimension)
 {
   if (!_quadrature_dimension_set)
   {
-    _quadrature_dimension = quadrature_order;
+    _quadrature_dimension = quadrature_dimension;
     _quadrature_dimension_set = true;
   }
 }
@@ -111,11 +131,14 @@ SurfaceWarehouse<T>::initializeQuadratures()
 
     _quadratures_initialized = true;
   }
+  else
+    std::cout << "Not able to initialize the Quadrature." << std::endl;
 }
 
 template <class T>
 void
-SurfaceWarehouse<T>::buildSurface(const libMesh::Node * a,
+SurfaceWarehouse<T>::buildSurface(const SurfaceID & surf_id,
+                                  const libMesh::Node * a,
                                   const libMesh::Node * b,
                                   const libMesh::Node * c)
 {
@@ -127,12 +150,13 @@ SurfaceWarehouse<T>::buildSurface(const libMesh::Node * a,
 
   std::shared_ptr<surface_t> triangle = std::make_shared<surface_t>(vertex_a, vertex_b, vertex_c);
   triangle->init(*_triangle_quadrature);
-  _surfaces.push_back(triangle);
+  _surfaces[surf_id] = triangle;
 }
 
 template <class T>
 void
-SurfaceWarehouse<T>::buildSurface(const libMesh::Node * a,
+SurfaceWarehouse<T>::buildSurface(const SurfaceID & surf_id,
+                                  const libMesh::Node * a,
                                   const libMesh::Node * b,
                                   const libMesh::Node * c,
                                   const libMesh::Node * d)
@@ -148,9 +172,7 @@ SurfaceWarehouse<T>::buildSurface(const libMesh::Node * a,
       std::make_shared<surface_t>(vertex_a, vertex_b, vertex_c, vertex_d);
   quadrilateral->init(*_quadrilateral_quadrature);
 
-  _surfaces.push_back(quadrilateral);
+  _surfaces[surf_id] = quadrilateral;
 }
 
 }
-
-#endif /* SURFACEWAREHOUSE_H */

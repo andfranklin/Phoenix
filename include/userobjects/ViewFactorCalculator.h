@@ -1,8 +1,6 @@
-#ifndef RADIATIONHEATTRANSFERSETUP_H
-#define RADIATIONHEATTRANSFERSETUP_H
+#pragma once
 
 #include "SideUserObject.h"
-// #include "libmesh/quadrature.h"
 #include "SurfaceConnectorBase.h"
 #include "GeometryUtils.h"
 
@@ -42,10 +40,9 @@ protected:
   MooseEnum _collision_repr;
 
   const std::set<BoundaryID> & _boundary_ids;
-  std::map<BoundaryID, std::vector<unsigned int>> _boundary_index_sets;
+  std::map<BoundaryID, std::vector<SurfaceID>> _boundary_surf_id_sets;
 
   Geom::SurfaceConnectorBase * _surface_connector;
-  unsigned int _current_surface_index;
 
   unsigned int _precision;
 
@@ -106,5 +103,3 @@ ViewFactorCalculator::buildSurfaceConnector()
     _surface_connector = new surface_connector_t();
   }
 }
-
-#endif /* RADIATIONHEATTRANSFERSETUP_H */
