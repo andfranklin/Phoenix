@@ -1,5 +1,4 @@
-#ifndef AVERAGERADIATIONFLUXHELPER_H
-#define AVERAGERADIATIONFLUXHELPER_H
+#pragma once
 
 #include "ShapeSideUserObject.h"
 #include "MooseVariableInterface.h"
@@ -45,5 +44,3 @@ private:
   std::unordered_map<SurfaceID, Real, SurfaceIDHash> _element_surface_to_res;
   std::unordered_map<SurfaceID, DenseVector<Real>, SurfaceIDHash> _element_surface_to_jac;
 };
-
-#endif /* AVERAGERADIATIONFLUXHELPER_H */
