@@ -6,12 +6,17 @@ A [MOOSE](https://www.mooseframework.org/) app for radiation heat transfer.
 ![logo](https://upload.wikimedia.org/wikipedia/commons/4/43/Phoenix-Fabelwesen.jpg "Phoenix")
 
 Phoenix deterministically calculates view factors between/of arbitrary geometries. Occlusion and
-self-occlusion can be accounted for. A variety of options exist for the users to select between
-using (fast, but potentially buggy) floating point numbers as the basis for the view factor
-computation or "exact" numbers (slow, but avoids bugs common with floating points).
+self-occlusion can be accounted for as the users sees appropriate. A variety of options exist for the users to select between
+using (fast, but potentially buggy) floating point numbers or "_exact_" numbers (slow, but avoids bugs common with floating points) as the basis for the view factor computation.
+
+Phoenix provides boundary conditions for:
+* Surface averaged, black-body radiation heat transfer (emission and irradiation),
+* Element averaged, black-body radiation heat transfer, and
+* Local black-body radiation emission.
+The computed view factors are directly feed to the boundary conditions that require them.
 
 _Note_: See [CGAL's](https://doc.cgal.org/latest/Manual/tutorial_hello_world.html) documentation
-for more information about "exact" computation.
+for more information about "_exact_" computation.
 
 Setup
 =====
@@ -69,7 +74,7 @@ To avoid getting burned :wink: by Phoenix, verify that everything has been insta
 	./run_tests
 
 and the unit tests:
-	
+
 	cd unit
 	make -j <number of cores>
 	./run_tests
@@ -92,3 +97,5 @@ If there are still issues then clean all of the directories, re-run the libMesh 
 	git submodule foreach --recursive git clean -xfd
 	./moose/scripts/update_and_rebuild_libmesh.sh
 	make -j <number of cores>
+
+_Warning_: This will remove all files that have not been checked-in to git.
