@@ -13,8 +13,8 @@ class TestableTriangleSurface : public TriangleSurface<T>
 {
 public:
   using TriangleSurface<T>::TriangleSurface;
-  using SurfaceBase<T>::getSurfaceLocation;
-  using SurfaceBase<T>::getAbsJacobian;
+  using Surface<T>::getSurfaceLocation;
+  using Surface<T>::getAbsJacobian;
 };
 
 template <class T>

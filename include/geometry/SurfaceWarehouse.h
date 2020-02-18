@@ -17,7 +17,7 @@ template <class T>
 class SurfaceWarehouse
 {
 public:
-  using SurfacePointer = std::shared_ptr<SurfaceBase<T>>;
+  using SurfacePointer = std::shared_ptr<Surface<T>>;
 
   SurfaceWarehouse();
   virtual ~SurfaceWarehouse() {}

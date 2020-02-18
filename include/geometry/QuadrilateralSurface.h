@@ -2,7 +2,7 @@
 #define QUADRILATERALSURFACE_H
 
 #include "GeometryUtils.h"
-#include "SurfaceBase.h"
+#include "Surface.h"
 
 // The quadrilateral surface class.
 
@@ -10,7 +10,7 @@ namespace Geom
 {
 
 template <class T>
-class QuadrilateralSurface : public SurfaceBase<T>
+class QuadrilateralSurface : public Surface<T>
 {
 public:
   QuadrilateralSurface(const std::shared_ptr<const Vertex<T>> a,
@@ -62,12 +62,12 @@ QuadrilateralSurface<T>::QuadrilateralSurface(const std::shared_ptr<const Vertex
                                               const std::shared_ptr<const Vertex<T>> b,
                                               const std::shared_ptr<const Vertex<T>> c,
                                               const std::shared_ptr<const Vertex<T>> d)
-  : SurfaceBase<T>(a, b, c),
+  : Surface<T>(a, b, c),
     _triangle_1(buildTriangle<T>(this->_a, this->_b, this->_c)),
     _d(std::make_shared<const Vertex<T>>(d->projectOnto(_triangle_1))),
     _triangle_2(buildTriangle<T>(this->_a, this->_c, this->_d))
 {
-  this->initializeSurfaceBase();
+  this->initializeSurface();
 }
 
 template <class T>

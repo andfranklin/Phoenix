@@ -11,7 +11,7 @@ template <class BaseKernel, class QuadKernel, class CollisionKernel>
 class SurfaceConnector : public SurfaceConnectorBase
 {
 public:
-  using SurfacePointer = std::shared_ptr<SurfaceBase<BaseKernel>>;
+  using SurfacePointer = std::shared_ptr<Surface<BaseKernel>>;
 
   SurfaceConnector();
   virtual ~SurfaceConnector() {}

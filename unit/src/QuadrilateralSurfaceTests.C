@@ -13,8 +13,8 @@ class TestableQuadrilateralSurface : public QuadrilateralSurface<T>
 {
 public:
   using QuadrilateralSurface<T>::QuadrilateralSurface;
-  using SurfaceBase<T>::getSurfaceLocation;
-  using SurfaceBase<T>::getAbsJacobian;
+  using Surface<T>::getSurfaceLocation;
+  using Surface<T>::getAbsJacobian;
 };
 
 template <class T>

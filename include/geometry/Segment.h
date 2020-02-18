@@ -11,7 +11,7 @@ namespace Geom
 {
 
 template <class T>
-class SurfaceBase;
+class Surface;
 
 template <class T>
 class Segment
@@ -23,7 +23,7 @@ public:
   const typename T::Segment_3 & segment() const { return _segment; }
   const typename T::Vector_3 & vector() const { return _vector; }
   const typename CGAL::Bbox_3 & bbox() const { return _bbox; }
-  bool isHeadOnWith(const SurfaceBase<T> * test_surface);
+  bool isHeadOnWith(const Surface<T> * test_surface);
 
 protected:
   typename T::Segment_3 _segment;
@@ -39,7 +39,7 @@ Segment<T>::Segment(const typename T::Point_3 & source, const typename T::Point_
 
 template <class T>
 bool
-Segment<T>::isHeadOnWith(const SurfaceBase<T> * test_surface)
+Segment<T>::isHeadOnWith(const Surface<T> * test_surface)
 {
   return isHeadOn<T>(test_surface->getNormal(), _vector);
 }

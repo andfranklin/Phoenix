@@ -2,7 +2,7 @@
 #define TRIANGLESURFACE_H
 
 #include "GeometryUtils.h"
-#include "SurfaceBase.h"
+#include "Surface.h"
 
 // The triangle surface class.
 
@@ -10,7 +10,7 @@ namespace Geom
 {
 
 template <class T>
-class TriangleSurface : public SurfaceBase<T>
+class TriangleSurface : public Surface<T>
 {
 public:
   TriangleSurface(const std::shared_ptr<const Vertex<T>> a,
@@ -38,10 +38,10 @@ template <class T>
 TriangleSurface<T>::TriangleSurface(const std::shared_ptr<const Vertex<T>> a,
                                     const std::shared_ptr<const Vertex<T>> b,
                                     const std::shared_ptr<const Vertex<T>> c)
-  : SurfaceBase<T>(a, b, c),
+  : Surface<T>(a, b, c),
   _triangle(buildTriangle<T>(this->_a, this->_b, this->_c))
 {
-  this->initializeSurfaceBase();
+  this->initializeSurface();
   _abs_jacobian = 2.0 * this->getArea();
 }
 

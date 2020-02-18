@@ -24,6 +24,8 @@ public:
   virtual void threadJoin(const UserObject & y) override;
   virtual void finalize() override;
 
+  // std::vector<std::shared_ptr<Geom::Surface>> getConnectedSurfaces(const SurfaceID & surf_id) const;
+
   inline const Node * getVertex(unsigned int index) { return _current_side_elem->node_ptr(index); }
 
 protected:

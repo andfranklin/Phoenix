@@ -23,7 +23,7 @@ bool
 BruteForceWithoutBBCSurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::isOccluded(
     const Segment<BaseKernel> & path)
 {
-  for (const std::shared_ptr<SurfaceBase<BaseKernel>> & surface :
+  for (const std::shared_ptr<Surface<BaseKernel>> & surface :
        this->_surface_warehouse.getSurfaces())
     if (surface->definitiveIntersection(path))
       if ((surface != this->_from_surf) && (surface != this->_to_surf))

@@ -42,7 +42,7 @@ TYPED_TEST(SurfaceWarehouseTests, buildTriangleSurface)
 
   SurfaceID surf_id = {0, 0};
   this->_surface_warehouse->buildSurface(surf_id, node_1, node_2, node_3);
-  std::shared_ptr<SurfaceBase<TypeParam>> triangle = this->_surface_warehouse->getSurfaces()[0];
+  std::shared_ptr<Surface<TypeParam>> triangle = this->_surface_warehouse->getSurfaces()[0];
 
   delete node_1;
   delete node_2;
@@ -81,7 +81,7 @@ TYPED_TEST(SurfaceWarehouseTests, buildQuadrilateralSurface)
 
   SurfaceID surf_id = {0, 0};
   this->_surface_warehouse->buildSurface(surf_id, node_1, node_2, node_3, node_4);
-  std::shared_ptr<SurfaceBase<TypeParam>> quadrilateral =
+  std::shared_ptr<Surface<TypeParam>> quadrilateral =
       this->_surface_warehouse->getSurfaces()[0];
 
   delete node_1;
