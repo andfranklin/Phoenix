@@ -57,7 +57,7 @@ AverageRadiationFluxHelper::computeJacobian()
     for (_qp = 0; _qp < _qrule->n_points(); _qp++)
       jac(_j) += _JxW[_qp] * _coord[_qp] * computeQpJacobian();
 
-  SideElemKey key = {_current_elem->unique_id(), _current_side};
+  SurfaceID key(_current_elem->unique_id(), _current_side);
   _element_surface_to_jac[key] = jac;
 }
 
@@ -76,20 +76,22 @@ AverageRadiationFluxHelper::computeResidual()
   for (_qp = 0; _qp < _qrule->n_points(); _qp++)
     res += _JxW[_qp] * _coord[_qp] * computeQpResidual();
 
-  SideElemKey key = {_current_elem->unique_id(), _current_side};
+  SurfaceID key(_current_elem->unique_id(), _current_side);
   _element_surface_to_res[key] = res;
 }
 
 Real
 AverageRadiationFluxHelper::getResidual(const Elem & elem, unsigned int side) const
 {
-  return _element_surface_to_res.at({elem.unique_id(), side});
+  SurfaceID key(elem.unique_id(), side);
+  return _element_surface_to_res.at(key);
 }
 
 Real
 AverageRadiationFluxHelper::getJacobian(const Elem & elem, unsigned int side, unsigned int j) const
 {
-  const auto & jacs = _element_surface_to_jac.at({elem.unique_id(), side});
+  SurfaceID key(elem.unique_id(), side);
+  const auto & jacs = _element_surface_to_jac.at(key);
 
   // kludge
   if (j >= jacs.size())

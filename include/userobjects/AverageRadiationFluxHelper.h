@@ -3,8 +3,8 @@
 
 #include "ShapeSideUserObject.h"
 #include "MooseVariableInterface.h"
+#include "SurfaceID.h"
 #include <unordered_map>
-#include <tuple>
 
 
 class AverageRadiationFluxHelper;
@@ -42,11 +42,8 @@ protected:
   const VariableGradient & _grad_temp;
 
 private:
-  // (elem's unique_id, elem's side)
-  using SideElemKey = std::tuple<unique_id_type, unsigned int>;
-
-  std::map<SideElemKey, Real> _element_surface_to_res;
-  std::map<SideElemKey, DenseVector<Real>> _element_surface_to_jac;
+  std::unordered_map<SurfaceID, Real, SurfaceIDHash> _element_surface_to_res;
+  std::unordered_map<SurfaceID, DenseVector<Real>, SurfaceIDHash> _element_surface_to_jac;
 };
 
 #endif /* AVERAGERADIATIONFLUXHELPER_H */

@@ -1,10 +1,7 @@
 #include "SurfaceID.h"
-#include <iostream>
 #include <limits>
 #include <assert.h>
 
-namespace Geom
-{
 
 SurfaceID::SurfaceID(libMesh::unique_id_type eid, unsigned int sid)
 : elem_id(eid),
@@ -14,10 +11,14 @@ SurfaceID::SurfaceID(libMesh::unique_id_type eid, unsigned int sid)
   assert(side_id < 10);
 }
 
-size_t
+bool
+SurfaceID::operator==(const SurfaceID & other) const
+{
+  return (elem_id == other.elem_id) && (side_id == other.side_id);
+}
+
+std::size_t
 SurfaceIDHash::operator()(const SurfaceID & id) const
 {
   return (10 * id.elem_id) + id.side_id;
-}
-
 }
