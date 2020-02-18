@@ -40,7 +40,7 @@ protected:
     delete node_3;
     delete node_4;
 
-    _quadrilateral = new TestableQuadrilateralSurface<T>(vertex_1, vertex_2, vertex_3, vertex_4);
+    _quadrilateral = new TestableQuadrilateralSurface<T>({0, 0}, vertex_1, vertex_2, vertex_3, vertex_4);
 
     std::unique_ptr<libMesh::QBase> quadrature =
         libMesh::QBase::build(libMesh::QGAUSS, 2, libMesh::SECOND);

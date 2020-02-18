@@ -37,7 +37,7 @@ protected:
     delete node_2;
     delete node_3;
 
-    _triangle = new TestableTriangleSurface<T>(vertex_1, vertex_2, vertex_3);
+    _triangle = new TestableTriangleSurface<T>({0, 0}, vertex_1, vertex_2, vertex_3);
 
     std::unique_ptr<libMesh::QBase> quadrature =
         libMesh::QBase::build(libMesh::QGAUSS, 2, libMesh::SECOND);

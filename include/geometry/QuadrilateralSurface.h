@@ -13,7 +13,8 @@ template <class T>
 class QuadrilateralSurface : public Surface<T>
 {
 public:
-  QuadrilateralSurface(const std::shared_ptr<const Vertex<T>> a,
+  QuadrilateralSurface(SurfaceID surface_id,
+                       const std::shared_ptr<const Vertex<T>> a,
                        const std::shared_ptr<const Vertex<T>> b,
                        const std::shared_ptr<const Vertex<T>> c,
                        const std::shared_ptr<const Vertex<T>> d);
@@ -58,11 +59,12 @@ protected:
 };
 
 template <class T>
-QuadrilateralSurface<T>::QuadrilateralSurface(const std::shared_ptr<const Vertex<T>> a,
+QuadrilateralSurface<T>::QuadrilateralSurface(SurfaceID surface_id,
+                                              const std::shared_ptr<const Vertex<T>> a,
                                               const std::shared_ptr<const Vertex<T>> b,
                                               const std::shared_ptr<const Vertex<T>> c,
                                               const std::shared_ptr<const Vertex<T>> d)
-  : Surface<T>(a, b, c),
+  : Surface<T>(surface_id, a, b, c),
     _triangle_1(buildTriangle<T>(this->_a, this->_b, this->_c)),
     _d(std::make_shared<const Vertex<T>>(d->projectOnto(_triangle_1))),
     _triangle_2(buildTriangle<T>(this->_a, this->_c, this->_d))

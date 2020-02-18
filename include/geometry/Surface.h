@@ -1,5 +1,4 @@
-#ifndef SURFACEBASE_H
-#define SURFACEBASE_H
+#pragma once
 
 #include "GeometryUtils.h"
 #include "VertexWarehouse.h"
@@ -19,9 +18,10 @@ protected:
   using qp_pair_t = std::pair<const typename T::Point_3 &, const typename libMesh::Real>;
 
 public:
-  Surface(const std::shared_ptr<const Vertex<T>> a,
-              const std::shared_ptr<const Vertex<T>> b,
-              const std::shared_ptr<const Vertex<T>> c);
+  Surface(const SurfaceID & surface_id,
+          const std::shared_ptr<const Vertex<T>> a,
+          const std::shared_ptr<const Vertex<T>> b,
+          const std::shared_ptr<const Vertex<T>> c);
 
   void init(const libMesh::QBase & quad);
 
@@ -82,10 +82,12 @@ protected:
 };
 
 template <class T>
-Surface<T>::Surface(const std::shared_ptr<const Vertex<T>> a,
-                            const std::shared_ptr<const Vertex<T>> b,
-                            const std::shared_ptr<const Vertex<T>> c)
-  : SurfaceBase(),
+Surface<T>::Surface(const SurfaceID & surface_id,
+                    const std::shared_ptr<const Vertex<T>> a,
+                    const std::shared_ptr<const Vertex<T>> b,
+                    const std::shared_ptr<const Vertex<T>> c)
+  : SurfaceBase(surface_id),
+
     _a(a),
     _b(b),
     _c(c),
@@ -178,6 +180,5 @@ Surface<T>::isIntersectedHeadOnBy(const Segment<T> & other)
   else
     return false;
 }
-}
 
-#endif /* SURFACEBASE_H */
+}

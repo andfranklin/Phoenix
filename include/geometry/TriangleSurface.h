@@ -13,7 +13,8 @@ template <class T>
 class TriangleSurface : public Surface<T>
 {
 public:
-  TriangleSurface(const std::shared_ptr<const Vertex<T>> a,
+  TriangleSurface(SurfaceID surface_id,
+                  const std::shared_ptr<const Vertex<T>> a,
                   const std::shared_ptr<const Vertex<T>> b,
                   const std::shared_ptr<const Vertex<T>> c);
   virtual ~TriangleSurface() {}
@@ -35,10 +36,11 @@ protected:
 };
 
 template <class T>
-TriangleSurface<T>::TriangleSurface(const std::shared_ptr<const Vertex<T>> a,
+TriangleSurface<T>::TriangleSurface(SurfaceID surface_id,
+                                    const std::shared_ptr<const Vertex<T>> a,
                                     const std::shared_ptr<const Vertex<T>> b,
                                     const std::shared_ptr<const Vertex<T>> c)
-  : Surface<T>(a, b, c),
+  : Surface<T>(surface_id, a, b, c),
   _triangle(buildTriangle<T>(this->_a, this->_b, this->_c))
 {
   this->initializeSurface();

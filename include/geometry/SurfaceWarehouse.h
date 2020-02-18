@@ -148,7 +148,7 @@ SurfaceWarehouse<T>::buildSurface(const SurfaceID & surf_id,
   const std::shared_ptr<const Vertex<T>> vertex_b(_vertex_warehouse.getVertex(b));
   const std::shared_ptr<const Vertex<T>> vertex_c(_vertex_warehouse.getVertex(c));
 
-  std::shared_ptr<surface_t> triangle = std::make_shared<surface_t>(vertex_a, vertex_b, vertex_c);
+  std::shared_ptr<surface_t> triangle = std::make_shared<surface_t>(surf_id, vertex_a, vertex_b, vertex_c);
   triangle->init(*_triangle_quadrature);
   _surfaces[surf_id] = triangle;
 }
@@ -169,7 +169,7 @@ SurfaceWarehouse<T>::buildSurface(const SurfaceID & surf_id,
   const std::shared_ptr<const Vertex<T>> vertex_d(_vertex_warehouse.getVertex(d));
 
   std::shared_ptr<surface_t> quadrilateral =
-      std::make_shared<surface_t>(vertex_a, vertex_b, vertex_c, vertex_d);
+      std::make_shared<surface_t>(surf_id, vertex_a, vertex_b, vertex_c, vertex_d);
   quadrilateral->init(*_quadrilateral_quadrature);
 
   _surfaces[surf_id] = quadrilateral;
