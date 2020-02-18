@@ -11,6 +11,12 @@ SurfaceID::SurfaceID(libMesh::unique_id_type eid, unsigned int sid)
   assert(side_id < 10);
 }
 
+SurfaceID::SurfaceID(const libMesh::Elem & elem, unsigned int side_id)
+: elem_id(elem.unique_id()),
+  side_id(side_id)
+{
+}
+
 bool
 SurfaceID::operator==(const SurfaceID & other) const
 {

@@ -23,8 +23,8 @@ public:
   virtual void threadJoin(const UserObject & /*y*/) override {};
   virtual void finalize() override {};
 
-  Real getResidual(const Elem & elem, unsigned int side) const;
-  Real getJacobian(const Elem & elem, unsigned int side, unsigned int j) const;
+  Real getResidual(const SurfaceID & surf_id) const;
+  Real getJacobian(const SurfaceID & surf_id, unsigned int j) const;
 
 protected:
   Real computeQpResidual();
