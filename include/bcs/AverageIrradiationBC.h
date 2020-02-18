@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AverageRadiationBC.h"
+#include "ViewFactorCalculator.h"
 
 class AverageIrradiationBC;
 
@@ -17,6 +18,8 @@ public:
   AverageIrradiationBC(const InputParameters & parameters);
 
 protected:
+  const ViewFactorCalculator & _view_factor_calculator;
+
   virtual Real computeQpResidual() override;
   virtual Real computeQpJacobian() override;
 };

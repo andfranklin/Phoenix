@@ -107,7 +107,7 @@ refinement_level = 1
 
 [UserObjects]
   [./view_factor_calculator]
-    type = RadiationHeatTransferSetup
+    type = ViewFactorCalculator
     quadrature_order = ${quadrature_order}
     quadrature_type = ${quadrature_type}
 
@@ -146,6 +146,7 @@ refinement_level = 1
   [./lp_right_irradiation]
     type = AverageIrradiationBC
     avg_rad_flux_helper = avg_rad_flux_helper
+    view_factor_calculator = view_factor_calculator
     variable = T
     boundary = lp_right
   [../]
@@ -160,6 +161,7 @@ refinement_level = 1
   [./rp_left_irradiation]
     type = AverageIrradiationBC
     avg_rad_flux_helper = avg_rad_flux_helper
+    view_factor_calculator = view_factor_calculator
     variable = T
     boundary = rp_left
   [../]

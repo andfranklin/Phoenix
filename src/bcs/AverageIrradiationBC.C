@@ -8,12 +8,17 @@ InputParameters
 AverageIrradiationBC::validParams()
 {
   InputParameters params = AverageRadiationBC::validParams();
+
+  params.addRequiredParam<UserObjectName>("view_factor_calculator",
+                                          "Interface to the view factors.");
+
   params.addClassDescription("BC class for averaged irradiation.");
   return params;
 }
 
 AverageIrradiationBC::AverageIrradiationBC(const InputParameters & parameters)
-  : AverageRadiationBC(parameters)
+  : AverageRadiationBC(parameters),
+  _view_factor_calculator(getUserObject<ViewFactorCalculator>("view_factor_calculator"))
 {
 }
 

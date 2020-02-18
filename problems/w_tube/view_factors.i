@@ -131,7 +131,7 @@ mesh = 'coarse'
 
 [UserObjects]
   [./view_factor_calculator]
-    type = RadiationHeatTransferSetup
+    type = ViewFactorCalculator
     quadrature_order = ${quadrature_order}
     quadrature_type = ${quadrature_type}
 

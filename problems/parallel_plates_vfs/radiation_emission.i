@@ -118,7 +118,7 @@ refinement_level = 1
 
 [UserObjects]
   [./view_factor_calculator]
-    type = RadiationHeatTransferSetup
+    type = ViewFactorCalculator
     quadrature_order = TWENTIETH
     # quadrature_type = TRAP
     # quadrature_order = CONSTANT

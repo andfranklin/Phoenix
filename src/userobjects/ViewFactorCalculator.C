@@ -1,12 +1,13 @@
-#include "RadiationHeatTransferSetup.h"
+#include "ViewFactorCalculator.h"
 #include "Conversion.h"
 #include "Assembly.h"
+#include "SurfaceID.h"
 
-registerMooseObject("PhoenixApp", RadiationHeatTransferSetup);
+registerMooseObject("PhoenixApp", ViewFactorCalculator);
 
 template <>
 InputParameters
-validParams<RadiationHeatTransferSetup>()
+validParams<ViewFactorCalculator>()
 {
   InputParameters params = validParams<SideUserObject>();
 
@@ -47,7 +48,7 @@ validParams<RadiationHeatTransferSetup>()
   return params;
 }
 
-RadiationHeatTransferSetup::RadiationHeatTransferSetup(const InputParameters & parameters)
+ViewFactorCalculator::ViewFactorCalculator(const InputParameters & parameters)
   : SideUserObject(parameters),
 
     _quad_type_enum(getParam<MooseEnum>("quadrature_type")),
@@ -76,13 +77,13 @@ RadiationHeatTransferSetup::RadiationHeatTransferSetup(const InputParameters & p
     _boundary_index_sets[boundary_id] = {};
 }
 
-RadiationHeatTransferSetup::~RadiationHeatTransferSetup()
+ViewFactorCalculator::~ViewFactorCalculator()
 {
   delete _surface_connector;
 }
 
 inline void
-RadiationHeatTransferSetup::setupSurfaceConnector()
+ViewFactorCalculator::setupSurfaceConnector()
 {
   if (_base_repr == "EXACT")
     applyBase<Geom::Exact>();
@@ -91,31 +92,31 @@ RadiationHeatTransferSetup::setupSurfaceConnector()
 }
 
 inline QuadratureType
-RadiationHeatTransferSetup::getQuadratureType()
+ViewFactorCalculator::getQuadratureType()
 {
   return _quad_type_enum == "DEFAULT" ? _qrule->type() : _specified_quad_type;
 }
 
 inline Order
-RadiationHeatTransferSetup::getQuadratureOrder()
+ViewFactorCalculator::getQuadratureOrder()
 {
   return _quad_order_enum == "DEFAULT" ? _qrule->get_order() : _specified_quad_order;
 }
 
 inline unsigned int
-RadiationHeatTransferSetup::getQuadratureDimension()
+ViewFactorCalculator::getQuadratureDimension()
 {
   return _qrule->get_dim();
 }
 
 void
-RadiationHeatTransferSetup::initialize()
+ViewFactorCalculator::initialize()
 {
   _current_surface_index = 0;
 }
 
 void
-RadiationHeatTransferSetup::execute()
+ViewFactorCalculator::execute()
 {
   if (_surface_connector->quadraturesNotInitialized())
   {
@@ -127,6 +128,20 @@ RadiationHeatTransferSetup::execute()
 
   BoundaryID current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
   _boundary_index_sets[current_boundary_id].push_back(_current_surface_index);
+
+  // std::cout << "making surface" << std::endl;
+  // std::cout << "current boundary id   : " << current_boundary_id << std::endl;
+  // std::cout << "current elem uid      : " << _current_elem->unique_id() << std::endl;
+  // std::cout << "current surface index : " << _current_side << std::endl;
+  // std::cout << std::endl;
+  //
+  // Geom::SurfaceID test(_current_elem->unique_id(), _current_side);
+  //
+  // std::cout << "test.elem_id : " << test.elem_id << std::endl;
+  // std::cout << "test.side_id : " << test.side_id << std::endl;
+  // std::cout << "hash         : " << Geom::SurfaceIDHash()(test) << std::endl;
+  // std::cout << std::endl;
+
 
   switch (_current_side_elem->n_vertices())
   {
@@ -151,12 +166,12 @@ RadiationHeatTransferSetup::execute()
 }
 
 void
-RadiationHeatTransferSetup::threadJoin(const UserObject & /*y*/)
+ViewFactorCalculator::threadJoin(const UserObject & /*y*/)
 {
 }
 
 void
-RadiationHeatTransferSetup::finalize()
+ViewFactorCalculator::finalize()
 {
   bool infeasible_vf_warning = false;
 

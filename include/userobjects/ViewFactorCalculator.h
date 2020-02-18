@@ -10,16 +10,16 @@
 #include "BruteForceWithBBCSurfaceConnector.h"
 #include "BruteForceWithoutBBCSurfaceConnector.h"
 
-class RadiationHeatTransferSetup;
+class ViewFactorCalculator;
 
 template <>
-InputParameters validParams<RadiationHeatTransferSetup>();
+InputParameters validParams<ViewFactorCalculator>();
 
-class RadiationHeatTransferSetup : public SideUserObject
+class ViewFactorCalculator : public SideUserObject
 {
 public:
-  RadiationHeatTransferSetup(const InputParameters & parameters);
-  virtual ~RadiationHeatTransferSetup();
+  ViewFactorCalculator(const InputParameters & parameters);
+  virtual ~ViewFactorCalculator();
 
   virtual void initialize() override;
   virtual void execute() override;
@@ -68,7 +68,7 @@ protected:
 
 template<typename BaseKernel>
 inline void
-RadiationHeatTransferSetup::applyBase()
+ViewFactorCalculator::applyBase()
 {
   if (_quad_repr == "EXACT")
     applyQuad<BaseKernel, Geom::Exact>();
@@ -78,7 +78,7 @@ RadiationHeatTransferSetup::applyBase()
 
 template<typename BaseKernel, typename QuadKernel>
 inline void
-RadiationHeatTransferSetup::applyQuad()
+ViewFactorCalculator::applyQuad()
 {
   if (_collision_repr == "EXACT")
     buildSurfaceConnector<BaseKernel, QuadKernel, Geom::Exact>();
@@ -88,7 +88,7 @@ RadiationHeatTransferSetup::applyQuad()
 
 template<typename BaseKernel, typename QuadKernel, typename CollisionKernel>
 inline void
-RadiationHeatTransferSetup::buildSurfaceConnector()
+ViewFactorCalculator::buildSurfaceConnector()
 {
   if (_occlusion_detection == "NONE")
   {
