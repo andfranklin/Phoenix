@@ -1,3 +1,5 @@
+quadrature_type = 'GAUSS'
+quadrature_order = 'FOURTH'
 refinement_level = 1
 
 [Mesh]
@@ -104,6 +106,21 @@ refinement_level = 1
 []
 
 [UserObjects]
+  [./view_factor_calculator]
+    type = RadiationHeatTransferSetup
+    quadrature_order = ${quadrature_order}
+    quadrature_type = ${quadrature_type}
+
+    boundary = 'lp_right rp_left'
+
+    occlusion_detection = NONE
+    base_representation = APPROXIMATE
+    collision_representation = APPROXIMATE
+    quadrature_representation = APPROXIMATE
+
+    precision = 40
+  [../]
+
   [./avg_rad_flux_helper]
     type = AverageRadiationFluxHelper
     variable = T
@@ -119,18 +136,32 @@ refinement_level = 1
     value = 300.0
   [../]
 
-  [./lp_right]
+  [./lp_right_emission]
     type = AverageRadiationEmissionBC
     avg_rad_flux_helper = avg_rad_flux_helper
     variable = T
     boundary = lp_right
   [../]
 
-  [./rp_left]
+  [./lp_right_irradiation]
+    type = AverageIrradiationBC
+    avg_rad_flux_helper = avg_rad_flux_helper
+    variable = T
+    boundary = lp_right
+  [../]
+
+  [./rp_left_emission]
     type = AverageRadiationEmissionBC
     avg_rad_flux_helper = avg_rad_flux_helper
     variable = T
     boundary = 'rp_left'
+  [../]
+
+  [./rp_left_irradiation]
+    type = AverageIrradiationBC
+    avg_rad_flux_helper = avg_rad_flux_helper
+    variable = T
+    boundary = rp_left
   [../]
 
   [./rp_right]
