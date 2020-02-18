@@ -17,9 +17,6 @@ public:
 
   virtual libMesh::Real getViewFactor(unsigned int from_surf_index, unsigned int to_surf_index) override;
 
-  libMesh::Real getViewFactor(const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
-                              const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf);
-
   virtual libMesh::Real getArea(unsigned int surf_index) override;
 
   virtual void buildSurface(const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) override;
@@ -38,6 +35,9 @@ protected:
 
   libMesh::Real calculateViewFactor(const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
                                     const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf);
+
+  libMesh::Real getViewFactor(const std::shared_ptr<SurfaceBase<BaseKernel>> from_surf,
+                              const std::shared_ptr<SurfaceBase<BaseKernel>> to_surf);
 
 protected:
   using surface_ptr_t = std::shared_ptr<SurfaceBase<BaseKernel>>;
