@@ -26,9 +26,6 @@ public:
   Real getElemAvgRes(const SurfaceID & surf_id) const;
   Real getElemAvgJac(const SurfaceID & surf_id, unsigned int j) const;
 
-  Real getSurfAvgRes(const BoundaryID & boundary_id) const;
-  Real getSurfAvgJac(const SurfaceID & surf_id, const BoundaryID & boundary_id, unsigned int j) const;
-
 protected:
   Real computeQpResidual();
   void computeResidual();
@@ -44,10 +41,6 @@ protected:
   const VariableGradient & _grad_temp;
 
 private:
-  std::unordered_map<BoundaryID, Real> _boundary_surface_areas;
-  std::unordered_map<BoundaryID, Real> _boundary_residuals;
-  std::unordered_map<SurfaceID, DenseVector<Real>, SurfaceIDHash> _boundary_jacobians;
-
   std::unordered_map<SurfaceID, Real, SurfaceIDHash> _element_surface_to_res;
   std::unordered_map<SurfaceID, DenseVector<Real>, SurfaceIDHash> _element_surface_to_jac;
 };
