@@ -150,6 +150,24 @@ ViewFactorCalculator::execute()
   }
 }
 
+const std::vector<SurfaceID> &
+ViewFactorCalculator::getConnectedSurfaceIDs(const SurfaceID & surf_id) const
+{
+  return _surface_connector->getConnectedSurfaceIDs(surf_id);
+}
+
+Real
+ViewFactorCalculator::getViewFactor(const SurfaceID & from_surf_id, const SurfaceID & to_surf_id) const
+{
+  return _surface_connector->getViewFactor(from_surf_id, to_surf_id);
+}
+
+Real
+ViewFactorCalculator::getArea(const SurfaceID & surf_id)
+{
+  return _surface_connector->getArea(surf_id);
+}
+
 void
 ViewFactorCalculator::threadJoin(const UserObject & /*y*/)
 {

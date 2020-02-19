@@ -30,8 +30,6 @@ AverageIrradiationBC::AverageIrradiationBC(const InputParameters & parameters)
 void
 AverageIrradiationBC::computeElemAvgIrradiation()
 {
-  // std::cout << "AverageIrradiationBC::computeElemAvgIrradiation" << std::endl;
-
   SurfaceID to_surf_id = {*_current_elem, _current_side};
   const std::vector<SurfaceID> & from_surf_ids = _view_factor_calculator.getConnectedSurfaceIDs(to_surf_id);
 
@@ -49,20 +47,8 @@ AverageIrradiationBC::computeElemAvgIrradiation()
 Real
 AverageIrradiationBC::computeQpResidual()
 {
-  // std::cout << "  AverageIrradiationBC::computeQpResidual" << std::endl;
-
-  return 0.0;
-
-  // return _test[_i][_qp] * _elem_avg_irradiation;
+  return _test[_i][_qp] * _elem_avg_irradiation;
 }
-
-// Real
-// AverageIrradiationBC::computeQpJacobian()
-// {
-// //   // Real T4_avg_dT = _avg_rad_flux_helper.getJacobian(*_current_elem, _current_side, _j);
-// //   // return _test[_i][_qp] * _sigma * T4_avg_dT;
-//   return 0.0;
-// }
 
 void
 AverageIrradiationBC::computeResidual()
@@ -70,10 +56,3 @@ AverageIrradiationBC::computeResidual()
   computeElemAvgIrradiation();
   IntegratedBC::computeResidual();
 }
-
-
-// void
-// AverageIrradiationBC::computeJacobian()
-// {
-//   AverageRadiationBC::computeJacobian();
-// }

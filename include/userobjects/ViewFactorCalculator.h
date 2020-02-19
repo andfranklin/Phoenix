@@ -24,7 +24,9 @@ public:
   virtual void threadJoin(const UserObject & y) override;
   virtual void finalize() override;
 
-  // std::vector<std::shared_ptr<Geom::Surface>> getConnectedSurfaces(const SurfaceID & surf_id) const;
+  const std::vector<SurfaceID> & getConnectedSurfaceIDs(const SurfaceID & surf_id) const;
+  Real getViewFactor(const SurfaceID & from_surf_id, const SurfaceID & to_surf_id) const;
+  Real getArea(const SurfaceID & surf_id);
 
   inline const Node * getVertex(unsigned int index) { return _current_side_elem->node_ptr(index); }
 

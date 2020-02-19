@@ -1,6 +1,6 @@
 quadrature_type = 'GAUSS'
 quadrature_order = 'FOURTH'
-refinement_level = 1
+refinement_level = 0
 
 [Mesh]
   [raw_left_plate]
@@ -70,7 +70,8 @@ refinement_level = 1
   [combined]
     type = RenameBoundaryGenerator
     input = 'combined_blocks_renamed'
-    old_boundary_id = '1 2 3 4 5 6 7 8 9 10 11 12'
+    old_boundary_id = '1 2 3 4 5 6
+                       7 8 9 10 11 12'
     new_boundary_name = 'lp_right lp_left lp_front lp_back lp_top lp_bottom
                          rp_right rp_left rp_front rp_back rp_top rp_bottom'
   []
@@ -82,7 +83,22 @@ refinement_level = 1
   [./T]
     order = FIRST
     family = LAGRANGE
-    initial_condition = 300
+  [../]
+[]
+
+[ICs]
+  [./left_plate_ic]
+    type = ConstantIC
+    value = 300
+    variable = T
+    block = 'left_plate'
+  [../]
+
+  [./right_plate_ic]
+    type = ConstantIC
+    value = 0
+    variable = T
+    block = 'right_plate'
   [../]
 []
 
@@ -100,8 +116,9 @@ refinement_level = 1
   [../]
   [./q_dot]
     type = HeatSource
-    value = 1000.0
+    value = 10000.0
     variable = T
+    block = 'left_plate'
   [../]
 []
 
@@ -129,13 +146,6 @@ refinement_level = 1
 []
 
 [BCs]
-  [./lp_left]
-    type = DirichletBC
-    variable = T
-    boundary = 'lp_left'
-    value = 300.0
-  [../]
-
   [./lp_right_emission]
     type = AverageRadiationEmissionBC
     avg_rad_flux_helper = avg_rad_flux_helper
@@ -165,30 +175,30 @@ refinement_level = 1
     variable = T
     boundary = rp_left
   [../]
-
-  [./rp_right]
-    type = DirichletBC
-    variable = T
-    boundary = 'rp_right'
-    value = 300.0
-  [../]
 []
 
 [Executioner]
   type = Transient
 
+  [./TimeStepper]
+    type = SolutionTimeAdaptiveDT
+    dt = 0.05
+  [../]
+
+  steady_state_detection = true
+  steady_state_tolerance = 1e-12
+
   scheme = implicit-euler
-  num_steps = 100
-  dt = 4e-2
 
   solve_type = PJFNK
 
-  l_tol = 1e-4
-  l_max_its = 30
+  l_abs_tol = 1e-5
+  l_tol = 2e-3
+  l_max_its = 5
 
   nl_abs_tol = 1e-10
   nl_rel_tol = 1e-9
-  nl_max_its = 30
+  nl_max_its = 10
 []
 
 [Outputs]

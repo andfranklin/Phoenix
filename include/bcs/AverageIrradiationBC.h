@@ -26,10 +26,7 @@ protected:
   Real _elem_avg_irradiation;
 
   virtual Real computeQpResidual() override;
-  // virtual Real computeQpJacobian() override;
-
   virtual void computeResidual() override;
-  // virtual void computeJacobian() override;
 
   void computeElemAvgIrradiation();
 };

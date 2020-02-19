@@ -22,7 +22,8 @@ public:
   virtual ~SurfaceConnectorBase() {}
 
   virtual libMesh::Real getViewFactor(const SurfaceID & from_surf_id, const SurfaceID & to_surf_id) = 0;
-  virtual libMesh::Real getArea(const SurfaceID & from_surf_id) = 0;
+  virtual libMesh::Real getArea(const SurfaceID & surf_id) = 0;
+  virtual const std::vector<SurfaceID> & getConnectedSurfaceIDs(const SurfaceID & surf_id) = 0;
 
   virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) = 0;
   virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d) = 0;

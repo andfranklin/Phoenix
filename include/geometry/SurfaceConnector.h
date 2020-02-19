@@ -17,8 +17,8 @@ public:
   virtual ~SurfaceConnector() {}
 
   virtual libMesh::Real getViewFactor(const SurfaceID & from_surf_id, const SurfaceID & to_surf_id) override;
-
-  virtual libMesh::Real getArea(const SurfaceID & from_surf_id) override;
+  virtual libMesh::Real getArea(const SurfaceID & surf_id) override;
+  virtual const std::vector<SurfaceID> & getConnectedSurfaceIDs(const SurfaceID & surf_id) override;
 
   virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c) override;
   virtual void buildSurface(const SurfaceID & surf_id, const libMesh::Node * a, const libMesh::Node * b, const libMesh::Node * c, const libMesh::Node * d) override;
@@ -177,11 +177,13 @@ SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getViewFactor(const S
     {
       residual = calculateViewFactor(from_surf, to_surf);
       _view_factor_residuals(from_surf, to_surf) = residual;
+      if (residual != 0.0)
+      {
+        from_surf->connect(*to_surf);
+        to_surf->connect(*from_surf);
+      }
     }
   }
-
-  // if (residual != 0.0)
-  //   std::cout << "Need to update connectivity matrix" << std::endl;
 
   return residual / from_surf->getArea();
 }
@@ -198,10 +200,17 @@ SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getViewFactor(
 
 template <class BaseKernel, class QuadKernel, class CollisionKernel>
 libMesh::Real
-SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getArea(const SurfaceID & from_surf_id)
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getArea(const SurfaceID & surf_id)
 {
-  const SurfacePointer surf(_surface_warehouse.getSurface(from_surf_id));
+  const SurfacePointer surf(_surface_warehouse.getSurface(surf_id));
   return surf->getArea();
+}
+
+template <class BaseKernel, class QuadKernel, class CollisionKernel>
+const std::vector<SurfaceID> &
+SurfaceConnector<BaseKernel, QuadKernel, CollisionKernel>::getConnectedSurfaceIDs(const SurfaceID & surf_id)
+{
+  return _surface_warehouse.getSurface(surf_id)->getConnections();
 }
 
 }
