@@ -187,7 +187,7 @@ refinement_level = 0
 
   [./Quadrature]
     type = GAUSS
-    order = AUTO
+
     element_order = SECOND
     side_order = FIFTH
   [../]
