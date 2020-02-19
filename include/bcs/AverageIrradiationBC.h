@@ -1,6 +1,8 @@
 #pragma once
 
-#include "AverageRadiationBC.h"
+#include "IntegratedBC.h"
+#include "RadiationBCInterface.h"
+#include "AverageRadiationBCInterface.h"
 #include "ViewFactorCalculator.h"
 
 class AverageIrradiationBC;
@@ -11,7 +13,9 @@ InputParameters validParams<AverageIrradiationBC>();
 /**
  * Average irradiation boundary condition.
 **/
-class AverageIrradiationBC : public AverageRadiationBC
+class AverageIrradiationBC : public IntegratedBC,
+                             public RadiationBCInterface,
+                             public AverageRadiationBCInterface
 {
 public:
   static InputParameters validParams();
@@ -19,7 +23,13 @@ public:
 
 protected:
   const ViewFactorCalculator & _view_factor_calculator;
+  Real _elem_avg_irradiation;
 
   virtual Real computeQpResidual() override;
-  virtual Real computeQpJacobian() override;
+  // virtual Real computeQpJacobian() override;
+
+  virtual void computeResidual() override;
+  // virtual void computeJacobian() override;
+
+  void computeElemAvgIrradiation();
 };

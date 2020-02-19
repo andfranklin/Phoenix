@@ -1,6 +1,8 @@
 #pragma once
 
-#include "AverageRadiationBC.h"
+#include "IntegratedBC.h"
+#include "RadiationBCInterface.h"
+#include "AverageRadiationBCInterface.h"
 
 class AverageRadiationEmissionBC;
 
@@ -10,7 +12,9 @@ InputParameters validParams<AverageRadiationEmissionBC>();
 /**
  * Average radiation emission boundary condition.
 **/
-class AverageRadiationEmissionBC : public AverageRadiationBC
+class AverageRadiationEmissionBC : public IntegratedBC,
+                                   public RadiationBCInterface,
+                                   public AverageRadiationBCInterface
 {
 public:
   static InputParameters validParams();

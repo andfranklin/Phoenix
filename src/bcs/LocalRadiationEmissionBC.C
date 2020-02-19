@@ -7,13 +7,16 @@ defineLegacyParams(LocalRadiationEmissionBC);
 InputParameters
 LocalRadiationEmissionBC::validParams()
 {
-  InputParameters params = RadiationBC::validParams();
+  InputParameters params = IntegratedBC::validParams();
+  params += RadiationBCInterface::validParams();
+
   params.addClassDescription("BC class for localized radiation emission.");
   return params;
 }
 
 LocalRadiationEmissionBC::LocalRadiationEmissionBC(const InputParameters & parameters)
-  : RadiationBC(parameters)
+  : IntegratedBC(parameters),
+  RadiationBCInterface(this)
 {
 }
 

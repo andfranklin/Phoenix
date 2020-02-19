@@ -7,13 +7,18 @@ defineLegacyParams(AverageRadiationEmissionBC);
 InputParameters
 AverageRadiationEmissionBC::validParams()
 {
-  InputParameters params = AverageRadiationBC::validParams();
+  InputParameters params = IntegratedBC::validParams();
+  params += RadiationBCInterface::validParams();
+  params += AverageRadiationBCInterface::validParams();
+
   params.addClassDescription("BC class for average radiation emission.");
   return params;
 }
 
 AverageRadiationEmissionBC::AverageRadiationEmissionBC(const InputParameters & parameters)
-  : AverageRadiationBC(parameters)
+  : IntegratedBC(parameters),
+    RadiationBCInterface(this),
+    AverageRadiationBCInterface(this)
 {
 }
 

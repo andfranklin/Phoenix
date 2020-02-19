@@ -1,6 +1,7 @@
 #pragma once
 
-#include "RadiationBC.h"
+#include "IntegratedBC.h"
+#include "RadiationBCInterface.h"
 
 class LocalRadiationEmissionBC;
 
@@ -10,7 +11,8 @@ InputParameters validParams<LocalRadiationEmissionBC>();
 /**
  * Localized radiation emission boundary condition.
 **/
-class LocalRadiationEmissionBC : public RadiationBC
+class LocalRadiationEmissionBC : public IntegratedBC,
+                                 public RadiationBCInterface
 {
 public:
   static InputParameters validParams();

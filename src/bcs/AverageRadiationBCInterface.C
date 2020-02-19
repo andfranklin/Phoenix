@@ -1,22 +1,21 @@
-#include "AverageRadiationBC.h"
+#include "AverageRadiationBCInterface.h"
+#include "BoundaryCondition.h"
 
-defineLegacyParams(AverageRadiationBC);
+defineLegacyParams(AverageRadiationBCInterface);
 
 InputParameters
-AverageRadiationBC::validParams()
+AverageRadiationBCInterface::validParams()
 {
-  InputParameters params = RadiationBC::validParams();
+  InputParameters params = emptyInputParameters();
   params.addRequiredParam<UserObjectName>("avg_rad_flux_helper",
                                           "Computes the average radiation flux local to each element's face.");
-  params.addClassDescription("Base BC class for average radiation emission.");
   return params;
 }
 
-AverageRadiationBC::AverageRadiationBC(const InputParameters & parameters)
-  : RadiationBC(parameters),
-  _avg_rad_flux_helper(getUserObject<AverageRadiationFluxHelper>("avg_rad_flux_helper"))
+AverageRadiationBCInterface::AverageRadiationBCInterface(BoundaryCondition * bc)
+  : _avg_rad_flux_helper(bc->getUserObjectTempl<AverageRadiationFluxHelper>("avg_rad_flux_helper"))
 {
-  if (!isBoundarySubset(_avg_rad_flux_helper.boundaryIDs()))
+  if (!bc->isBoundarySubset(_avg_rad_flux_helper.boundaryIDs()))
   {
     std::string error = "The specified boundaries are not a subset of the ";
     error += "boundaries analized by the AverageRadiationFluxHelper. ";
@@ -24,7 +23,7 @@ AverageRadiationBC::AverageRadiationBC(const InputParameters & parameters)
     {
       error += "Specified boundaries: {";
 
-      const auto & bns = boundaryNames();
+      const auto & bns = bc->boundaryNames();
       unsigned int i = 1;
       for (auto bn: bns)
       {
@@ -48,6 +47,6 @@ AverageRadiationBC::AverageRadiationBC(const InputParameters & parameters)
       error += "}.";
     }
 
-    mooseError(error);
+    bc->mooseError(error);
   }
 }
