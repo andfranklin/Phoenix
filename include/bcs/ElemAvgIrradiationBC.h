@@ -5,21 +5,21 @@
 #include "AverageRadiationBCInterface.h"
 #include "ViewFactorCalculator.h"
 
-class AverageIrradiationBC;
+class ElemAvgIrradiationBC;
 
 template <>
-InputParameters validParams<AverageIrradiationBC>();
+InputParameters validParams<ElemAvgIrradiationBC>();
 
 /**
  * Average irradiation boundary condition.
 **/
-class AverageIrradiationBC : public IntegratedBC,
+class ElemAvgIrradiationBC : public IntegratedBC,
                              public RadiationBCInterface,
                              public AverageRadiationBCInterface
 {
 public:
   static InputParameters validParams();
-  AverageIrradiationBC(const InputParameters & parameters);
+  ElemAvgIrradiationBC(const InputParameters & parameters);
 
 protected:
   const ViewFactorCalculator & _view_factor_calculator;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "InputParameters.h"
+#include "BoundaryCondition.h"
 #include "AverageRadiationFluxHelper.h"
 
 class AverageRadiationBCInterface;

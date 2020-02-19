@@ -1,11 +1,11 @@
-#include "AverageRadiationEmissionBC.h"
+#include "ElemAvgRadiationEmissionBC.h"
 
-registerMooseObject("PhoenixApp", AverageRadiationEmissionBC);
+registerMooseObject("PhoenixApp", ElemAvgRadiationEmissionBC);
 
-defineLegacyParams(AverageRadiationEmissionBC);
+defineLegacyParams(ElemAvgRadiationEmissionBC);
 
 InputParameters
-AverageRadiationEmissionBC::validParams()
+ElemAvgRadiationEmissionBC::validParams()
 {
   InputParameters params = IntegratedBC::validParams();
   params += RadiationBCInterface::validParams();
@@ -15,7 +15,7 @@ AverageRadiationEmissionBC::validParams()
   return params;
 }
 
-AverageRadiationEmissionBC::AverageRadiationEmissionBC(const InputParameters & parameters)
+ElemAvgRadiationEmissionBC::ElemAvgRadiationEmissionBC(const InputParameters & parameters)
   : IntegratedBC(parameters),
     RadiationBCInterface(this),
     AverageRadiationBCInterface(this)
@@ -23,7 +23,7 @@ AverageRadiationEmissionBC::AverageRadiationEmissionBC(const InputParameters & p
 }
 
 Real
-AverageRadiationEmissionBC::computeQpResidual()
+ElemAvgRadiationEmissionBC::computeQpResidual()
 {
   SurfaceID surf_id = {*_current_elem, _current_side};
   Real T4_avg = _avg_rad_flux_helper.getResidual(surf_id);
@@ -31,7 +31,7 @@ AverageRadiationEmissionBC::computeQpResidual()
 }
 
 Real
-AverageRadiationEmissionBC::computeQpJacobian()
+ElemAvgRadiationEmissionBC::computeQpJacobian()
 {
   SurfaceID surf_id = {*_current_elem, _current_side};
   Real T4_avg_dT = _avg_rad_flux_helper.getJacobian(surf_id, _j);

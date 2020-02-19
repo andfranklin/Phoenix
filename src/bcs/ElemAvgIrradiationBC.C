@@ -1,12 +1,12 @@
-#include "AverageIrradiationBC.h"
+#include "ElemAvgIrradiationBC.h"
 #include "SurfaceID.h"
 
-registerMooseObject("PhoenixApp", AverageIrradiationBC);
+registerMooseObject("PhoenixApp", ElemAvgIrradiationBC);
 
-defineLegacyParams(AverageIrradiationBC);
+defineLegacyParams(ElemAvgIrradiationBC);
 
 InputParameters
-AverageIrradiationBC::validParams()
+ElemAvgIrradiationBC::validParams()
 {
   InputParameters params = IntegratedBC::validParams();
   params += RadiationBCInterface::validParams();
@@ -19,7 +19,7 @@ AverageIrradiationBC::validParams()
   return params;
 }
 
-AverageIrradiationBC::AverageIrradiationBC(const InputParameters & parameters)
+ElemAvgIrradiationBC::ElemAvgIrradiationBC(const InputParameters & parameters)
   : IntegratedBC(parameters),
     RadiationBCInterface(this),
     AverageRadiationBCInterface(this),
@@ -28,7 +28,7 @@ AverageIrradiationBC::AverageIrradiationBC(const InputParameters & parameters)
 }
 
 void
-AverageIrradiationBC::computeElemAvgIrradiation()
+ElemAvgIrradiationBC::computeElemAvgIrradiation()
 {
   SurfaceID to_surf_id = {*_current_elem, _current_side};
   const std::vector<SurfaceID> & from_surf_ids = _view_factor_calculator.getConnectedSurfaceIDs(to_surf_id);
@@ -45,13 +45,13 @@ AverageIrradiationBC::computeElemAvgIrradiation()
 }
 
 Real
-AverageIrradiationBC::computeQpResidual()
+ElemAvgIrradiationBC::computeQpResidual()
 {
   return _test[_i][_qp] * _elem_avg_irradiation;
 }
 
 void
-AverageIrradiationBC::computeResidual()
+ElemAvgIrradiationBC::computeResidual()
 {
   computeElemAvgIrradiation();
   IntegratedBC::computeResidual();

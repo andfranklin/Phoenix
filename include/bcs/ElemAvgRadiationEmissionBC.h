@@ -4,21 +4,21 @@
 #include "RadiationBCInterface.h"
 #include "AverageRadiationBCInterface.h"
 
-class AverageRadiationEmissionBC;
+class ElemAvgRadiationEmissionBC;
 
 template <>
-InputParameters validParams<AverageRadiationEmissionBC>();
+InputParameters validParams<ElemAvgRadiationEmissionBC>();
 
 /**
  * Average radiation emission boundary condition.
 **/
-class AverageRadiationEmissionBC : public IntegratedBC,
+class ElemAvgRadiationEmissionBC : public IntegratedBC,
                                    public RadiationBCInterface,
                                    public AverageRadiationBCInterface
 {
 public:
   static InputParameters validParams();
-  AverageRadiationEmissionBC(const InputParameters & parameters);
+  ElemAvgRadiationEmissionBC(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpResidual() override;

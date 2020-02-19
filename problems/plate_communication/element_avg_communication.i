@@ -147,14 +147,14 @@ refinement_level = 0
 
 [BCs]
   [./lp_right_emission]
-    type = AverageRadiationEmissionBC
+    type = ElemAvgRadiationEmissionBC
     avg_rad_flux_helper = avg_rad_flux_helper
     variable = T
     boundary = lp_right
   [../]
 
   [./lp_right_irradiation]
-    type = AverageIrradiationBC
+    type = ElemAvgIrradiationBC
     avg_rad_flux_helper = avg_rad_flux_helper
     view_factor_calculator = view_factor_calculator
     variable = T
@@ -162,14 +162,14 @@ refinement_level = 0
   [../]
 
   [./rp_left_emission]
-    type = AverageRadiationEmissionBC
+    type = ElemAvgRadiationEmissionBC
     avg_rad_flux_helper = avg_rad_flux_helper
     variable = T
     boundary = 'rp_left'
   [../]
 
   [./rp_left_irradiation]
-    type = AverageIrradiationBC
+    type = ElemAvgIrradiationBC
     avg_rad_flux_helper = avg_rad_flux_helper
     view_factor_calculator = view_factor_calculator
     variable = T

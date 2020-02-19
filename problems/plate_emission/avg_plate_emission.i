@@ -61,7 +61,7 @@
   # 305K @ right and 427.5K @ center
   # @ 4s when q_dot=1000
   [./right]
-    type = AverageRadiationEmissionBC
+    type = ElemAvgRadiationEmissionBC
     avg_rad_flux_helper = avg_rad_flux_helper
     variable = T
     boundary = 'right'
