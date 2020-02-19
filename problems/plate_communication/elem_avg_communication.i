@@ -185,6 +185,13 @@ refinement_level = 0
     dt = 0.05
   [../]
 
+  [./Quadrature]
+    type = GAUSS
+    order = AUTO
+    element_order = SECOND
+    side_order = FIFTH
+  [../]
+
   steady_state_detection = true
   steady_state_tolerance = 1e-12
 

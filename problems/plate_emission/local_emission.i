@@ -66,6 +66,13 @@
   num_steps = 100
   dt = 4e-2
 
+  [./Quadrature]
+    type = GAUSS
+    order = AUTO
+    element_order = SECOND
+    side_order = FIFTH
+  [../]
+
   solve_type = PJFNK
 
   l_tol = 1e-4
