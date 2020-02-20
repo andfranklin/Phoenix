@@ -1,6 +1,6 @@
 quadrature_type = 'GAUSS'
 quadrature_order = 'FOURTH'
-refinement_level = 0
+refinement_level = 2
 
 [Mesh]
   [raw_left_plate]
@@ -209,6 +209,9 @@ refinement_level = 0
 []
 
 [Outputs]
-  execute_on = 'initial timestep_end'
-  exodus = true
+  [./out]
+     type = Exodus
+     refinements = 2
+     execute_on = 'INITIAL TIMESTEP_END'
+  [../]
 []
