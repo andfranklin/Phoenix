@@ -83,6 +83,6 @@ if __name__ == "__main__":
 	c_11_solution = c_11_analytic_function(10.0, 10.0, 9.0)
 	c_12_solution = c_12_analytic_function(10.0, 10.0, 9.0)
 
-	print(f"Expected Solution : {expected:.25}")
-	print(f"    C-11 Solution : {c_11_solution:.25}")
-	print(f"    C-12 Solution ; {c_12_solution:.25}")
+	print(f"Expected Solution : {expected:.40}")
+	print(f"    C-11 Solution : {c_11_solution:.40}")
+	print(f"    C-12 Solution ; {c_12_solution:.40}")

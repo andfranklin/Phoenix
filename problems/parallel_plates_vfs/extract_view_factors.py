@@ -8,8 +8,8 @@ def is_viewfactor_line(line):
 
 class VFInfo:
     def __init__(self, from_, to_, value_):
-        self.from_ = str(from_)
-        self.to_ = str(to_)
+        self.from_ = str(from_).strip()
+        self.to_ = str(to_).strip()
         self.value_ = float(value_)
 
     def __str__(self):
@@ -32,12 +32,13 @@ class VFMatrix:
         return self.matrix[key]
 
 
-def call_phoenix(case, refinement_level=0, quadrature_type="GAUSS", quadrature_order="FOURTH"):
+def call_phoenix(case, refinement_level=0, quadrature_type="GAUSS",
+                 quadrature_order="FOURTH"):
     call_list = ["../../phoenix-opt", "-i", f"{case}/view_factors.i"]
     call_list.append(f"refinement_level={refinement_level}")
     call_list.append(f"quadrature_type={quadrature_type}")
     call_list.append(f"quadrature_order={quadrature_order}")
-    results = subprocess.check_output(call_list)
+    results = subprocess.check_output(call_list, stderr=subprocess.DEVNULL)
 
     split_results = results.splitlines()
     vf_lines = list(filter(is_viewfactor_line, split_results))
