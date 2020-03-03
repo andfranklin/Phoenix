@@ -36,7 +36,7 @@ ElemAvgIrradiationBC::computeElemAvgIrradiation()
   _elem_avg_irradiation = 0.0;
   for (const SurfaceID & from_surf_id : from_surf_ids)
   {
-    Real vf = _view_factor_calculator.getViewFactor(from_surf_id, to_surf_id);
+    Real vf = _view_factor_calculator.getViewFactor(to_surf_id, from_surf_id);
     Real T4_avg = _avg_rad_flux_helper.getElemAvgRes(from_surf_id);
     _elem_avg_irradiation += vf * T4_avg;
   }
