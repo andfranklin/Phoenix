@@ -1,5 +1,6 @@
 import gmsh
 import sys
+from meshing_functions import make_tube
 
 model = gmsh.model
 factory = model.occ
@@ -13,19 +14,18 @@ gmsh.option.setNumber("General.Terminal", 1)
 
 model.add(FILENAME_STEM)
 
-mesh_size = 1.0 * 2.0
+origin = 0.0, 0.0, 1.0
+axis_dir = 0.0, 0.0, 1.0
+inner_radius = 1.0
+outer_radius = 2.0
+height = 15.0
+n_rings = 1
+n_sectors = 8
+n_layers = 30
 
-gmsh.option.setNumber("Mesh.Algorithm", 6);
-gmsh.option.setNumber("Mesh.CharacteristicLengthMin", mesh_size);
-gmsh.option.setNumber("Mesh.CharacteristicLengthMax", mesh_size);
+make_tube(origin, axis_dir, inner_radius, outer_radius, height, n_rings, n_sectors, n_layers)
 
-inner_rad = 2.0
-start_point = 0.0, 0.0, 1.0
-cyl_vector  = 0.0, 0.0, 15.0 
-
-factory.addCylinder(*start_point, *cyl_vector, inner_rad)
-
-factory.synchronize()
+model.geo.synchronize()
 model.mesh.generate(3)
 gmsh.write(MSH_FILENAME)
 gmsh.finalize()

@@ -16,7 +16,7 @@ quadrature_order = 'FOURTH'
     new_block_id = '1'
   []
 
-  [blocking_cylinder]
+  [blocking_cylinder_t_and_b]
     type = SideSetsFromNormalsGenerator
     input = 'blocking_cylinder_blocked'
     new_boundary = '1 2'
@@ -25,6 +25,15 @@ quadrature_order = 'FOURTH'
     fixed_normal = true
     replace = true
     variance = 1e-6
+  []
+
+  [blocking_cylinder]
+    type = SideSetsPoolFloodGenerator
+    input = 'blocking_cylinder_t_and_b'
+    new_boundaries = '3 4'
+    points = '1.0 0.0 1.0
+              2.0 0.0 1.0'
+    replace = true
   []
 
   [raw_bottom_ring]
@@ -53,7 +62,7 @@ quadrature_order = 'FOURTH'
     type = RenameBoundaryGenerator
     input = 'bottom_ring_split_sides'
     old_boundary_id = '0 1 2'
-    new_boundary_id = '3 4 5'
+    new_boundary_id = '5 6 7'
   []
 
   [raw_top_ring]
@@ -82,7 +91,7 @@ quadrature_order = 'FOURTH'
     type = RenameBoundaryGenerator
     input = 'top_ring_split_sides'
     old_boundary_id = '0 1 2'
-    new_boundary_id = '6 7 8'
+    new_boundary_id = '8 9 10'
   []
 
   [combined_raw]
@@ -100,8 +109,8 @@ quadrature_order = 'FOURTH'
   [combined]
     type = RenameBoundaryGenerator
     input = 'combined_blocks_renamed'
-    old_boundary_id = '0 1 2 3 4 5 6 7 8'
-    new_boundary_name = 'cyl_side cyl_top cyl_bottom
+    old_boundary_id = '1 2 3 4 5 6 7 8 9 10'
+    new_boundary_name = 'cyl_top cyl_bottom cyl_inside cyl_outside
                          br_sides br_top br_bottom
                          tr_sides tr_top tr_bottom'
   []
@@ -159,7 +168,7 @@ quadrature_order = 'FOURTH'
     quadrature_order = ${quadrature_order}
     quadrature_type = ${quadrature_type}
 
-    boundary = 'br_top tr_bottom cyl_side'
+    boundary = 'br_top tr_bottom cyl_outside'
 
     occlusion_detection = BRUTE_FORCE_WITHOUT_BBOX
     base_representation = APPROXIMATE
