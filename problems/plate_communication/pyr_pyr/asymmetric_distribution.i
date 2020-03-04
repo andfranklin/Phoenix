@@ -219,7 +219,7 @@ refinement_level = 2
 [Outputs]
   [./out]
      type = Exodus
-     refinements = 2
+     refinements = 0
      execute_on = 'INITIAL TIMESTEP_END'
   [../]
 []
