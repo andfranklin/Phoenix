@@ -21,7 +21,7 @@ outer_radius = 2.0
 height = 15.0
 n_rings = 1
 n_sectors = 8
-n_layers = 30
+n_layers = 15
 
 make_tube(origin, axis_dir, inner_radius, outer_radius, height, n_rings, n_sectors, n_layers)
 

@@ -13,7 +13,7 @@ gmsh.option.setNumber("General.Terminal", 1)
 
 model.add(FILENAME_STEM)
 
-mesh_size = 1.0 * 2.0
+mesh_size = 1.0
 
 gmsh.option.setNumber("Mesh.Algorithm", 6);
 gmsh.option.setNumber("Mesh.CharacteristicLengthMin", mesh_size);
