@@ -3,7 +3,7 @@ Phoenix
 
 A [MOOSE](https://www.mooseframework.org/) app for radiation heat transfer.
 
-![logo](https://upload.wikimedia.org/wikipedia/commons/4/43/Phoenix-Fabelwesen.jpg "Phoenix")
+![logo](phoenix.png "Phoenix")
 
 Phoenix deterministically calculates view factors between/of arbitrary geometries. Occlusion and
 self-occlusion can be accounted for as the users sees appropriate. A variety of options exist for the users to select between
