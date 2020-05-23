@@ -2,14 +2,14 @@
   type = GeneratedMesh
   dim = 3
   xmin = 0
-  xmax = 1
+  xmax = 10
   ymin = 0
-  ymax = 1
+  ymax = 10
   zmin = 0
-  zmax = 0.1
-  nx = 10
-  ny = 10
-  nz = 1
+  zmax = 1.0
+  nx = 40
+  ny = 40
+  nz = 4
 
   boundary_id =   '1 2 3 4 5 6'
   boundary_name = 'bottom right top left front back'
@@ -37,53 +37,52 @@
   [../]
   [./q_dot]
     type = HeatSource
-    value = 1000.0
+    value = 10000.0
     variable = T
   [../]
 []
 
 [BCs]
-  [./left]
-    type = DirichletBC
-    variable = T
-    boundary = 'left'
-    value = 300.0
-  [../]
-
-  # 305K @ right and 427.5K @ center
-  # @ 4s when q_dot=1000
-  [./right]
+  [./front]
     type = LocalRadiationEmissionBC
     variable = T
-    boundary = 'right'
+    boundary = 'front'
   [../]
 []
 
 [Executioner]
   type = Transient
 
-  scheme = implicit-euler
-  num_steps = 100
-  dt = 4e-2
+  [./TimeStepper]
+    type = SolutionTimeAdaptiveDT
+    dt = 0.05
+  [../]
 
   [./Quadrature]
     type = GAUSS
-    order = AUTO
+
     element_order = SECOND
     side_order = FIFTH
   [../]
 
+  steady_state_detection = true
+  steady_state_tolerance = 1e-12
+
+  scheme = implicit-euler
+
   solve_type = PJFNK
 
-  l_tol = 1e-4
-  l_max_its = 30
+  l_abs_tol = 1e-5
+  l_tol = 2e-3
+  l_max_its = 5
 
   nl_abs_tol = 1e-10
   nl_rel_tol = 1e-9
-  nl_max_its = 30
+  nl_max_its = 10
 []
 
 [Outputs]
   execute_on = 'initial timestep_end'
+  refinements = 2
   exodus = true
 []

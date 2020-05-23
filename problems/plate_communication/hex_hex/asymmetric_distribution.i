@@ -89,14 +89,14 @@ refinement_level = 2
 [ICs]
   [./left_plate_ic]
     type = ConstantIC
-    value = 0
+    value = 273.15
     variable = T
     block = 'left_plate'
   [../]
 
   [./right_plate_ic]
     type = ConstantIC
-    value = 0
+    value = 273.15
     variable = T
     block = 'right_plate'
   [../]
@@ -150,7 +150,7 @@ refinement_level = 2
   [./lp_back]
     type = DirichletBC
     variable = T
-    value = 0.0
+    value = 273.15
     boundary = lp_back
   [../]
 

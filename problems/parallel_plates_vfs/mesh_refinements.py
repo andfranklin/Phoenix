@@ -12,10 +12,26 @@ analytic_solution = analytic_function(10.0, 10.0, 9.0)
 
 quadrature_types = ["GAUSS", "GRID", "MONOMIAL",
                     "SIMPSON", "TRAP"]
-
 quadrature_order = "FOURTH"
+refinement_levels = list(range(5))
 
-refinement_levels = list(range(6))
+if case == "hex_hex":
+    n_surf_elems = [4 * (4 ** i) for i in refinement_levels]
+elif case == "pyr_pyr":
+    n_surf_elems = [14 * (4 ** i) for i in refinement_levels]
+else:
+    raise Exception(f"unsupported case ({case}).")
+
+surface_areas = [100.0 / n_elems for n_elems in n_surf_elems]
+
+print("N. Surface Elems")
+print(n_surf_elems)
+print()
+
+print("Surface Areas")
+print(surface_areas)
+print()
+
 for quadrature_type in quadrature_types:
     print(quadrature_type)
     errors = []
@@ -31,12 +47,12 @@ for quadrature_type in quadrature_types:
         error = abs(solution - analytic_solution)
         errors.append(error)
     label = quadrature_type.replace("_", "-").capitalize()
-    plt.plot(refinement_levels, errors, label=label, linestyle="-", marker=".")
+    plt.plot(n_surf_elems, errors, label=f"{label}", linestyle="-", marker=".")
 
-plt.xlabel("Refinement Level")
+plt.xlabel("Number of Surface Elements")
 plt.ylabel("Absolute Error")
 plt.yscale("log")
-plt.xticks(ticks=refinement_levels, labels=[str(level)[0] for level in refinement_levels])
-plt.legend()
+plt.xscale("log")
+plt.legend(prop={"family":"monospace"})
 plt.savefig(f"mesh_refinement_{case}.png")
 plt.show()
